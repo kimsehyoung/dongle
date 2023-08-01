@@ -1,0 +1,28 @@
+// https://containers.dev/implementors/json_reference/
+{
+    "name": "dongle-dev",
+    "image": "dongle:dev",
+    "initializeCommand": "mkdir -p work && podman build -t dongle:dev -f Dockerfile .",
+    "onCreateCommand": "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts",
+    "runArgs": ["--name=dongle-dev"],
+    "appPort": [
+        "10001-10010:10001-10010/tcp",
+        "10011-10020:10011-10020/udp"
+    ],
+    "workspaceFolder": "/home/work",
+    "mounts": [
+        "type=bind,source=${localWorkspaceFolder}/work,target=/home/work",
+        "type=bind,source=${localEnv:HOME}/.ssh/id_rsa,target=/root/.ssh/id_rsa,readonly"
+    ],
+    "customizations": {
+        "vscode": {
+            "settings": {},
+    		"extensions": [
+                "golang.go",
+                "donjayamanne.githistory",
+                "bierner.markdown-mermaid"
+            ]
+    	}
+    },
+    "shutdownAction": "none"
+}

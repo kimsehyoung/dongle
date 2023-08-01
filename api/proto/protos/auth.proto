@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+package dongle.auth;
+option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/auth";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+
+message AccountRequest {
+    string email = 1;
+    string name = 2;
+    string password = 3;
+    string phone_number = 4;
+}
+
+message Account {
+	string email = 1;
+    string name = 2;
+    string password = 3;
+    string phone_number = 4;
+}
+
+message CreateTokenRequest {
+    string email = 1;
+    string password = 2;
+}
+message RefreshTokenRequest {
+    string refresh_token = 1;
+}
+message TokenResposne {
+	string token = 1;
+    string refresh_token = 2;
+}
+
+
+service Auth {
+    // ### Account ###
+    rpc CreateAccount (Account) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/accounts"
+            body: "*"
+        };
+    };
+    rpc UpdateAccount (Account) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            patch: "/accounts/{name}"
+            body: "*"
+        };
+    };
+    rpc DeleteAccount (Account) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/accounts/{name}"
+        };
+    };
+    // ### Token ###
+    rpc CreateToken (CreateTokenRequest) returns (TokenResposne) {
+        option (google.api.http) = {
+            post: "/auth/token"
+            body: "*"
+        };
+    };
+    rpc RefreshToken (RefreshTokenRequest) returns (TokenResposne) {
+        option (google.api.http) = {
+            get: "/auth/token"
+        };
+    }
+    rpc RevokeToken (google.protobuf.Empty) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/auth/token"
+        };
+    };
+}
