@@ -1,0 +1,22 @@
+syntax = "proto3";
+package dongle.ping;
+option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/testpb";
+
+import "google/api/annotations.proto";
+
+message PingRequest {
+    int64 timestamp = 1;
+}
+
+message PongResponse {
+    int64 timestamp = 1;
+    string message = 2;
+}
+
+service Test {
+	rpc PingPong(PingRequest) returns (PongResponse) {
+        option (google.api.http) = {
+			get : "/ping"
+		};
+	};
+}

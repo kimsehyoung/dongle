@@ -1,6 +1,6 @@
 syntax = "proto3";
 package dongle.speech;
-option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/speech";
+option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb";
 
 import "google/api/annotations.proto";
 

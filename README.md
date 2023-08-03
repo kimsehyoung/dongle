@@ -1,7 +1,7 @@
 # Dongle
 
-### 1st ver
-사용해 본 기술을 활용 & 새로운 기술을 적용하여 API SaaS 플랫폼을 설계 및 구축하고, 다음 work cycle 에서 유연하게 변경/확장할 수 있는 MSA<br><br>
+이후 진행될 work cycle을 위한 설계, 환경 구축, 기술 적용 단계<br>
+MSA로 유연하게 변경/확장 가능<br><br>
 
 
 **목차**

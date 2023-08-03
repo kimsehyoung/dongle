@@ -4,7 +4,7 @@
 // - protoc             v3.19.6
 // source: speech.proto
 
-package speech
+package speechpb
 
 import (
 	context "context"

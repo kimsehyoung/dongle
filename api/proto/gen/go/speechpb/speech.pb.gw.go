@@ -2,11 +2,11 @@
 // source: speech.proto
 
 /*
-Package speech is a reverse proxy.
+Package speechpb is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package speech
+package speechpb
 
 import (
 	"context"

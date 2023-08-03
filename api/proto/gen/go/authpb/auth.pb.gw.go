@@ -2,11 +2,11 @@
 // source: auth.proto
 
 /*
-Package auth is a reverse proxy.
+Package authpb is a reverse proxy.
 
 It translates gRPC into RESTful JSON APIs.
 */
-package auth
+package authpb
 
 import (
 	"context"
