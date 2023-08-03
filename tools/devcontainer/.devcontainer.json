@@ -3,8 +3,13 @@
     "name": "dongle-dev",
     "image": "dongle:dev",
     "initializeCommand": "mkdir -p work && podman build -t dongle:dev -f Dockerfile .",
-    "onCreateCommand": "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts",
-    "runArgs": ["--name=dongle-dev"],
+    "onCreateCommand": {
+        "ssh": "ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts",
+        "userEmail": "git config --global user.email ${GIT_USER_EMAIL}",
+        "userName": "git config --global user.name ${GIT_USER_NAME}",
+        "goPrivate": "go env -w GOPRIVATE=${GOPRIVATE}"
+    },
+    "runArgs": ["--name=dongle-dev", "--env-file=.env"],
     "appPort": [
         "10001-10010:10001-10010/tcp",
         "10011-10020:10011-10020/udp"
