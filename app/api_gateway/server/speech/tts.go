@@ -8,7 +8,7 @@ import (
 	"github.com/kimsehyoung/gopackages/shlog"
 )
 
-func (s *server.SpeechServer) Synthesize(ctx context.Context, req *speechpb.SynthesizeRequest) (*speechpb.SynthesizeResponse, error) {
+func (s *server.ApiGatewayServer) Synthesize(ctx context.Context, req *speechpb.SynthesizeRequest) (*speechpb.SynthesizeResponse, error) {
 	shlog.Logf("INFO", "Start")
 	return nil, nil
 }

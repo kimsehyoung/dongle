@@ -11,6 +11,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -26,7 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TestClient interface {
-	PingPong(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PongResponse, error)
+	PingPong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PongResponse, error)
 }
 
 type testClient struct {
@@ -37,7 +38,7 @@ func NewTestClient(cc grpc.ClientConnInterface) TestClient {
 	return &testClient{cc}
 }
 
-func (c *testClient) PingPong(ctx context.Context, in *PingRequest, opts ...grpc.CallOption) (*PongResponse, error) {
+func (c *testClient) PingPong(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*PongResponse, error) {
 	out := new(PongResponse)
 	err := c.cc.Invoke(ctx, Test_PingPong_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -50,7 +51,7 @@ func (c *testClient) PingPong(ctx context.Context, in *PingRequest, opts ...grpc
 // All implementations must embed UnimplementedTestServer
 // for forward compatibility
 type TestServer interface {
-	PingPong(context.Context, *PingRequest) (*PongResponse, error)
+	PingPong(context.Context, *emptypb.Empty) (*PongResponse, error)
 	mustEmbedUnimplementedTestServer()
 }
 
@@ -58,7 +59,7 @@ type TestServer interface {
 type UnimplementedTestServer struct {
 }
 
-func (UnimplementedTestServer) PingPong(context.Context, *PingRequest) (*PongResponse, error) {
+func (UnimplementedTestServer) PingPong(context.Context, *emptypb.Empty) (*PongResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PingPong not implemented")
 }
 func (UnimplementedTestServer) mustEmbedUnimplementedTestServer() {}
@@ -75,7 +76,7 @@ func RegisterTestServer(s grpc.ServiceRegistrar, srv TestServer) {
 }
 
 func _Test_PingPong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PingRequest)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -87,7 +88,7 @@ func _Test_PingPong_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: Test_PingPong_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TestServer).PingPong(ctx, req.(*PingRequest))
+		return srv.(TestServer).PingPong(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }

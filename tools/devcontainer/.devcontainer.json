@@ -25,7 +25,8 @@
     		"extensions": [
                 "golang.go",
                 "donjayamanne.githistory",
-                "bierner.markdown-mermaid"
+                "bierner.markdown-mermaid",
+                "ms-python.python"
             ]
     	}
     },

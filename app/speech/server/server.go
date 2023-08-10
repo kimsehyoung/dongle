@@ -3,26 +3,27 @@ package server
 import (
 	"net"
 
-	"github.com/kimsehyoung/dongle/api/proto/gen/go/testpb"
+	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
 	"github.com/kimsehyoung/gopackages/shlog"
+
 	"google.golang.org/grpc"
 )
 
 type ServiceInfo struct {
-	TestServiceAddr string
+	SpeechServiceAddr string
 }
 
-type testService struct {
-	testpb.TestServer
+type speechService struct {
+	speechpb.SpeechServer
 }
 
 func StartGrpcServer(serviceInfo ServiceInfo) {
-	lis, err := net.Listen("tcp", serviceInfo.TestServiceAddr)
+	lis, err := net.Listen("tcp", serviceInfo.SpeechServiceAddr)
 	if err != nil {
 		shlog.Logf("FATAL", "failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	testpb.RegisterTestServer(grpcServer, &testService{})
+	speechpb.RegisterSpeechServer(grpcServer, &speechService{})
 
 	shlog.Logf("INFO", "gRPC server listening at %v", lis.Addr())
 	if err := grpcServer.Serve(lis); err != nil {
