@@ -4,11 +4,8 @@ go 1.20
 
 require (
 	cloud.google.com/go/texttospeech v1.7.1
-	github.com/golang-jwt/jwt/v4 v4.5.0
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.2
 	github.com/kimsehyoung/gopackages/shlog v0.0.0-20230801061529-0f2c907f2d50
-	github.com/shserver/gopackage/shlog v0.0.0-20230706021957-dd9c0380b376
 	google.golang.org/genproto/googleapis/api v0.0.0-20230726155614-23370e0ffb3e
 	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.31.0

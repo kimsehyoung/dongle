@@ -28,6 +28,7 @@ RUN \
     [ "$(uname -m)" = "x86_64" ] && ARCH="amd64" || ARCH="arm64" && \
     curl -LO https://go.dev/dl/go${GO_VERSION}.linux-${ARCH}.tar.gz && \
     rm -rf /usr/local/go && tar -C /usr/local -xzf go${GO_VERSION}.linux-${ARCH}.tar.gz && \
+    rm -rf go${GO_VERSION}.linux-${ARCH}.tar.gz && \
     go install golang.org/x/tools/gopls@latest && \
     go install github.com/ramya-rao-a/go-outline@latest && \
     go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.31 && \
@@ -36,4 +37,5 @@ RUN \
 
 # Python
 RUN \
-    apt-get install python3.11 python3-pip -y
+    apt-get install python3.11 python3-pip -y && \
+    apt-get install ffmpeg -y

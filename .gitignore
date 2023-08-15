@@ -5,3 +5,6 @@
 # Dev
 tools/devcontainer/work
 tools/devcontainer/.env
+
+# Secret
+*google-credentials*

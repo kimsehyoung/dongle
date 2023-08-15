@@ -6,7 +6,11 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
+	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/testpb"
+	"github.com/kimsehyoung/dongle/app/api_gateway/server/auth"
+	"github.com/kimsehyoung/dongle/app/api_gateway/server/speech"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/test"
 	"github.com/kimsehyoung/gopackages/shlog"
 	"google.golang.org/grpc"
@@ -14,25 +18,25 @@ import (
 )
 
 type ServiceInfo struct {
+	// API Gateway gRPC, REST Ports
 	GrpcPort string
 	RestPort string
-
+	// TLS configs
 	TlsEnabled  bool
 	KeyFilePath string
 	CrtFilePath string
-
+	// Services
 	TestServiceAddr   string
 	AuthServiceAddr   string
 	SpeechServiceAddr string
 }
 
 func StartGrpcServer(serviceInfo ServiceInfo) {
-	// Register gRPC-Gateway server
+	// Register gRPC server
 	grpcServer := grpc.NewServer()
-
 	testpb.RegisterTestServer(grpcServer, &test.TestService{TestClient: test.GetTestClient(serviceInfo.TestServiceAddr)})
-	// authpb.RegisterAuthServer(grpcServer, &ApiGatewayServer{})
-	// speechpb.RegisterSpeechServer(grpcServer, &ApiGatewayServer{})
+	authpb.RegisterAuthServer(grpcServer, &auth.AuthService{AuthClient: auth.GetAuthClient(serviceInfo.AuthServiceAddr)})
+	speechpb.RegisterSpeechServer(grpcServer, &speech.SpeechService{SpeechClient: speech.GetSpeechClient(serviceInfo.SpeechServiceAddr)})
 
 	// Start gRPC Server
 	lis, err := net.Listen("tcp", "0.0.0.0:"+serviceInfo.GrpcPort)
@@ -60,14 +64,14 @@ func StartRestServer(serviceInfo ServiceInfo) {
 	if err != nil {
 		shlog.Logf("FATAL", "can't register test service handler: %v", err)
 	}
-	// err = authpb.RegisterAuthHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
-	// if err != nil {
-	// 	shlog.Logf("FATAL", "can't register test service handler: %v", err)
-	// }
-	// err = speechpb.RegisterSpeechHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
-	// if err != nil {
-	// 	shlog.Logf("FATAL", "can't register test service handler: %v", err)
-	// }
+	err = authpb.RegisterAuthHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
+	if err != nil {
+		shlog.Logf("FATAL", "can't register auth service handler: %v", err)
+	}
+	err = speechpb.RegisterSpeechHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
+	if err != nil {
+		shlog.Logf("FATAL", "can't register speech service handler: %v", err)
+	}
 
 	// Start REST server
 	shlog.Logf("INFO", "Start gRPC-Gateway server(TLS: %t) listening at %s", serviceInfo.TlsEnabled, serviceInfo.RestPort)

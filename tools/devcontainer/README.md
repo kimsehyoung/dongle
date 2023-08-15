@@ -37,7 +37,7 @@ podman machine start test
 ## 3. Start Dev Containers
 
 ### Create Dev Container
-1. Move `.env.example` to `.env` and Edit `.env`
+1. Copy `.env.example` to `.env` and Edit `.env`
 2. In `"Dev Containers: Open Folder in Containers..."` of Command Palette.
 3. Select the `'devcontainer'` directory which includes `.devcontainer.json`, `Dockerfile` and `.env`.
 
