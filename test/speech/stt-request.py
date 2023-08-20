@@ -12,7 +12,7 @@ data = {
 }
 
 start_time = time.time()
-# POST 요청을 10번 반복
+
 for _ in range(1):
     response = requests.post(url, json=data, headers=headers)
     print(response.status_code, response.text)

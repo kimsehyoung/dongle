@@ -33,9 +33,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AuthClient interface {
 	// ### Account ###
-	CreateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	DeleteAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	CreateAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	UpdateAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// ### Token ###
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...grpc.CallOption) (*TokenResposne, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*TokenResposne, error)
@@ -50,7 +50,7 @@ func NewAuthClient(cc grpc.ClientConnInterface) AuthClient {
 	return &authClient{cc}
 }
 
-func (c *authClient) CreateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authClient) CreateAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, Auth_CreateAccount_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -59,7 +59,7 @@ func (c *authClient) CreateAccount(ctx context.Context, in *Account, opts ...grp
 	return out, nil
 }
 
-func (c *authClient) UpdateAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authClient) UpdateAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, Auth_UpdateAccount_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -68,7 +68,7 @@ func (c *authClient) UpdateAccount(ctx context.Context, in *Account, opts ...grp
 	return out, nil
 }
 
-func (c *authClient) DeleteAccount(ctx context.Context, in *Account, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *authClient) DeleteAccount(ctx context.Context, in *AccountRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, Auth_DeleteAccount_FullMethodName, in, out, opts...)
 	if err != nil {
@@ -109,9 +109,9 @@ func (c *authClient) RevokeToken(ctx context.Context, in *emptypb.Empty, opts ..
 // for forward compatibility
 type AuthServer interface {
 	// ### Account ###
-	CreateAccount(context.Context, *Account) (*emptypb.Empty, error)
-	UpdateAccount(context.Context, *Account) (*emptypb.Empty, error)
-	DeleteAccount(context.Context, *Account) (*emptypb.Empty, error)
+	CreateAccount(context.Context, *AccountRequest) (*emptypb.Empty, error)
+	UpdateAccount(context.Context, *AccountRequest) (*emptypb.Empty, error)
+	DeleteAccount(context.Context, *AccountRequest) (*emptypb.Empty, error)
 	// ### Token ###
 	CreateToken(context.Context, *CreateTokenRequest) (*TokenResposne, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*TokenResposne, error)
@@ -123,13 +123,13 @@ type AuthServer interface {
 type UnimplementedAuthServer struct {
 }
 
-func (UnimplementedAuthServer) CreateAccount(context.Context, *Account) (*emptypb.Empty, error) {
+func (UnimplementedAuthServer) CreateAccount(context.Context, *AccountRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
 }
-func (UnimplementedAuthServer) UpdateAccount(context.Context, *Account) (*emptypb.Empty, error) {
+func (UnimplementedAuthServer) UpdateAccount(context.Context, *AccountRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateAccount not implemented")
 }
-func (UnimplementedAuthServer) DeleteAccount(context.Context, *Account) (*emptypb.Empty, error) {
+func (UnimplementedAuthServer) DeleteAccount(context.Context, *AccountRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
 }
 func (UnimplementedAuthServer) CreateToken(context.Context, *CreateTokenRequest) (*TokenResposne, error) {
@@ -155,7 +155,7 @@ func RegisterAuthServer(s grpc.ServiceRegistrar, srv AuthServer) {
 }
 
 func _Auth_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Account)
+	in := new(AccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -167,13 +167,13 @@ func _Auth_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Auth_CreateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).CreateAccount(ctx, req.(*Account))
+		return srv.(AuthServer).CreateAccount(ctx, req.(*AccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Auth_UpdateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Account)
+	in := new(AccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -185,13 +185,13 @@ func _Auth_UpdateAccount_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Auth_UpdateAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).UpdateAccount(ctx, req.(*Account))
+		return srv.(AuthServer).UpdateAccount(ctx, req.(*AccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Auth_DeleteAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Account)
+	in := new(AccountRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -203,7 +203,7 @@ func _Auth_DeleteAccount_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: Auth_DeleteAccount_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).DeleteAccount(ctx, req.(*Account))
+		return srv.(AuthServer).DeleteAccount(ctx, req.(*AccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

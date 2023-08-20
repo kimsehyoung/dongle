@@ -7,7 +7,7 @@ import (
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
 	"github.com/kimsehyoung/dongle/app/speech/server/google"
 	"github.com/kimsehyoung/dongle/app/speech/server/whisper"
-	"github.com/kimsehyoung/gopackages/shlog"
+	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,7 +20,7 @@ func (s *speechService) Recognize(ctx context.Context, req *speechpb.RecognizeRe
 	}
 	speechResp, err := s.whisperClient.SpeechToText(whisper.TRANSCRIPTION_PATH, request)
 	if err != nil {
-		shlog.Logf("ERROR", "Failed to request whisper SpeechToText: %v", err)
+		logger.Errorf("Failed to request whisper SpeechToText: %v", err)
 		return nil, err
 	}
 	return &speechpb.RecognizeResponse{Text: speechResp.Text}, nil
@@ -40,7 +40,7 @@ func (s *speechService) Synthesize(ctx context.Context, req *speechpb.Synthesize
 
 	ttsResp, err := s.googleClient.TextToSpeech(ctx, request)
 	if err != nil {
-		shlog.Logf("ERROR", "Failed to request google TextToSpeech: %v", err)
+		logger.Errorf("Failed to request google TextToSpeech: %v", err)
 		return nil, err
 	}
 	return &speechpb.SynthesizeResponse{Audio: []byte(ttsResp.Audio)}, nil

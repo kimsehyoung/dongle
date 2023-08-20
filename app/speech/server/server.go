@@ -7,7 +7,7 @@ import (
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
 	"github.com/kimsehyoung/dongle/app/speech/server/google"
 	"github.com/kimsehyoung/dongle/app/speech/server/whisper"
-	"github.com/kimsehyoung/gopackages/shlog"
+	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
 )
 
@@ -36,11 +36,11 @@ func StartGrpcServer(serviceInfo ServiceInfo) {
 	// Start gRPC server
 	lis, err := net.Listen("tcp", serviceInfo.SpeechServiceAddr)
 	if err != nil {
-		shlog.Logf("FATAL", "failed to listen: %v", err)
+		logger.Fatalf("failed to listen: %v", err)
 	}
 
-	shlog.Logf("INFO", "gRPC server listening at %v", lis.Addr())
+	logger.Infof("gRPC server listening at %v", lis.Addr())
 	if err := grpcServer.Serve(lis); err != nil {
-		shlog.Logf("FATAL", "failed to serve: %v", err)
+		logger.Fatalf("failed to serve: %v", err)
 	}
 }

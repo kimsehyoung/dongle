@@ -1,0 +1,49 @@
+@startuml app_arch_level1
+!include <c4/C4_Component.puml>  
+title Dongle Architecture Diagram
+
+Person(client, "Client" , "Users")
+
+
+System_Boundary(c1, "Dongle") {
+    Boundary(c2, "API Gateway pattern") {
+        Container(api_gateway, "API Gateway", "Go, gRPC-Gateway","Single API endpoint, Interceptor")
+        Container(auth, "Auth", "Go, gRPC", "Account, Token-based, Role-based access control")
+        Container(speech, "Speech", "Go, gRPC", "TTS, STT")
+        Container(chatbot, "Chatbot", "Python, gRPC", "1. rule-based intent\n 2. deeplearning chat-api")
+        Container(music, "Music", "Go, gRPC","Music service Management")
+    }
+    ContainerDb(auth_memorydb, "In-memory database", "Redis", "refresh token")
+    Boundary(c2_db, "Database per Service pattern") {
+        ContainerDb(auth_rdb, "Relational database", "PostgreSQL", "account, role")
+        ContainerDb(chatbot_rdb, "Relational database", "PostgreSQL", "question history")
+    }
+
+}
+
+
+System_Boundary(c1_gcp, "Goodle Cloud") {
+    System_Ext(texttospeech, "Text-to-Speech API")
+}
+
+System_Boundary(c1_onpremise, "Self-hosted") {
+    System_Ext(whisper, "Whisper", "Speech-to-Text API")
+    System_Ext(minio, "Minio", "Object Storage")
+}
+
+
+Rel(client, api_gateway, "", "REST/gRPC")
+Rel(api_gateway, auth, "", "gRPC")
+Rel(api_gateway, speech, "", "gRPC")
+Rel(api_gateway, chatbot, "", "gRPC")
+Rel(api_gateway, music, "", "gRPC")
+Rel_R(api_gateway, auth_memorydb, "", "TCP")
+Rel(auth, auth_rdb, "", "TCP")
+Rel(speech, whisper, "", "REST")
+Rel(speech, texttospeech, "", "gRPC")
+Rel(chatbot, chatbot_rdb, "", "TCP")
+Rel(music, minio, "", "HTTP")
+
+
+
+@enduml

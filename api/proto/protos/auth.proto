@@ -7,18 +7,19 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 
+enum Role {
+    UNSPECIFIED = 0;
+    ADMIN = 1;
+    MANAGER = 2;
+    USER = 3;
+}
+
 message AccountRequest {
     string email = 1;
     string name = 2;
     string password = 3;
     string phone_number = 4;
-}
-
-message Account {
-	string email = 1;
-    string name = 2;
-    string password = 3;
-    string phone_number = 4;
+    Role role = 5;
 }
 
 message CreateTokenRequest {
@@ -36,19 +37,19 @@ message TokenResposne {
 
 service Auth {
     // ### Account ###
-    rpc CreateAccount (Account) returns (google.protobuf.Empty) {
+    rpc CreateAccount (AccountRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             post: "/accounts"
             body: "*"
         };
     };
-    rpc UpdateAccount (Account) returns (google.protobuf.Empty) {
+    rpc UpdateAccount (AccountRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             patch: "/accounts/{name}"
             body: "*"
         };
     };
-    rpc DeleteAccount (Account) returns (google.protobuf.Empty) {
+    rpc DeleteAccount (AccountRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             delete: "/accounts/{name}"
         };

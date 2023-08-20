@@ -1,20 +1,23 @@
 FROM ubuntu:22.04
 
+
+ARG DEBIAN_FRONTEND=noninteractive
 # ENV
+ENV TZ=Asia/Seoul
 ENV PROTOC_VERSION 3.19.6
 ENV GO_VERSION 1.20
 ENV PATH "$PATH:/usr/local/protoc/bin"
 ENV PATH "$PATH:/usr/local/go/bin"
+ENV GOPATH="/home/go"
+ENV PATH="$PATH:$GOPATH/bin"
 
-
-WORKDIR /home
-
+WORKDIR /home/work
 
 # Common Packages
 RUN \
-    ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
     apt-get update -y && \
-    apt-get install unzip curl git net-tools -y
+    apt-get install -y tzdata unzip curl git tree net-tools && \
+    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime
 
 # Protoc
 RUN \

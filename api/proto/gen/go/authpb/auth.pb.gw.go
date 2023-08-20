@@ -33,7 +33,7 @@ var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
 func request_Auth_CreateAccount_0(ctx context.Context, marshaler runtime.Marshaler, client AuthClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -50,7 +50,7 @@ func request_Auth_CreateAccount_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func local_request_Auth_CreateAccount_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -67,7 +67,7 @@ func local_request_Auth_CreateAccount_0(ctx context.Context, marshaler runtime.M
 }
 
 func request_Auth_UpdateAccount_0(ctx context.Context, marshaler runtime.Marshaler, client AuthClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -101,7 +101,7 @@ func request_Auth_UpdateAccount_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func local_request_Auth_UpdateAccount_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -139,7 +139,7 @@ var (
 )
 
 func request_Auth_DeleteAccount_0(ctx context.Context, marshaler runtime.Marshaler, client AuthClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -172,7 +172,7 @@ func request_Auth_DeleteAccount_0(ctx context.Context, marshaler runtime.Marshal
 }
 
 func local_request_Auth_DeleteAccount_0(ctx context.Context, marshaler runtime.Marshaler, server AuthServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Account
+	var protoReq AccountRequest
 	var metadata runtime.ServerMetadata
 
 	var (

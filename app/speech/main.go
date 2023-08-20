@@ -5,15 +5,14 @@ import (
 
 	"github.com/kimsehyoung/dongle/app/speech/server"
 	"github.com/kimsehyoung/dongle/internal/utils/env"
-	"github.com/kimsehyoung/gopackages/shlog"
+	"github.com/kimsehyoung/logger"
 )
 
 func main() {
-	shlog.InitLogger("")
 
 	_, exists := os.LookupEnv("GOOGLE_APPLICATION_CREDENTIALS")
 	if !exists {
-		shlog.Logf("FATAL", "Google Credential is not configured")
+		logger.Fatalf("Google Credential is not configured")
 	}
 	serviceInfo := server.ServiceInfo{
 		SpeechServiceAddr: env.GetEnvString("SPEECH_SERVICE_ADDR", "0.0.0.0:10005"),

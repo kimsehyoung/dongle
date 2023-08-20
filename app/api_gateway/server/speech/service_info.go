@@ -1,8 +1,10 @@
 package speech
 
 import (
+	"sync"
+
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
-	"github.com/kimsehyoung/gopackages/shlog"
+	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -12,10 +14,18 @@ type SpeechService struct {
 	SpeechClient speechpb.SpeechClient
 }
 
+var (
+	once         sync.Once
+	speechClient speechpb.SpeechClient
+)
+
 func GetSpeechClient(speechServiceAddr string) speechpb.SpeechClient {
-	conn, err := grpc.Dial(speechServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		shlog.Logf("ERROR", "can't dial to Speech Serivce (%s) %v", speechServiceAddr, err)
-	}
-	return speechpb.NewSpeechClient(conn)
+	once.Do(func() {
+		conn, err := grpc.Dial(speechServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			logger.Errorf("can't dial to Speech Serivce (%s) %v", speechServiceAddr, err)
+		}
+		speechClient = speechpb.NewSpeechClient(conn)
+	})
+	return speechClient
 }

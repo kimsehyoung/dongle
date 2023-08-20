@@ -12,7 +12,7 @@ import (
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/auth"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/speech"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/test"
-	"github.com/kimsehyoung/gopackages/shlog"
+	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -41,12 +41,13 @@ func StartGrpcServer(serviceInfo ServiceInfo) {
 	// Start gRPC Server
 	lis, err := net.Listen("tcp", "0.0.0.0:"+serviceInfo.GrpcPort)
 	if err != nil {
-		shlog.Logf("FATAL", "gRPC Listen error: %v", err)
+		logger.Fatalf("gRPC Listen error: %v", err)
 	}
 	go func() {
+		logger.Infof("Start gRPC server(TLS: %t) listening at %s", serviceInfo.TlsEnabled, serviceInfo.GrpcPort)
 		err := grpcServer.Serve(lis)
 		if err != nil {
-			shlog.Logf("FATAL", "gRPC Serve error: %v", err)
+			logger.Fatalf("gRPC Serve error: %v", err)
 		}
 	}()
 }
@@ -62,25 +63,25 @@ func StartRestServer(serviceInfo ServiceInfo) {
 	}
 	err := testpb.RegisterTestHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
 	if err != nil {
-		shlog.Logf("FATAL", "can't register test service handler: %v", err)
+		logger.Fatalf("can't register test service handler: %v", err)
 	}
 	err = authpb.RegisterAuthHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
 	if err != nil {
-		shlog.Logf("FATAL", "can't register auth service handler: %v", err)
+		logger.Fatalf("can't register auth service handler: %v", err)
 	}
 	err = speechpb.RegisterSpeechHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
 	if err != nil {
-		shlog.Logf("FATAL", "can't register speech service handler: %v", err)
+		logger.Fatalf("can't register speech service handler: %v", err)
 	}
 
 	// Start REST server
-	shlog.Logf("INFO", "Start gRPC-Gateway server(TLS: %t) listening at %s", serviceInfo.TlsEnabled, serviceInfo.RestPort)
+	logger.Infof("Start gRPC-Gateway server(TLS: %t) listening at %s", serviceInfo.TlsEnabled, serviceInfo.RestPort)
 	if serviceInfo.TlsEnabled {
 		err = http.ListenAndServeTLS("0.0.0.0:"+serviceInfo.RestPort, serviceInfo.CrtFilePath, serviceInfo.KeyFilePath, mux)
 	} else {
 		err = http.ListenAndServe("0.0.0.0:"+serviceInfo.RestPort, mux)
 	}
 	if err != nil {
-		shlog.Logf("FATAL", "runServer error: %v", err)
+		logger.Fatalf("runServer error: %v", err)
 	}
 }
