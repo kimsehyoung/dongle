@@ -298,12 +298,12 @@ func (rq *RoleQuery) WithAccounts(opts ...func(*AccountQuery)) *RoleQuery {
 // Example:
 //
 //	var v []struct {
-//		Level string `json:"level,omitempty"`
+//		MemberType string `json:"member_type,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		GroupBy(role.FieldLevel).
+//		GroupBy(role.FieldMemberType).
 //		Aggregate(authgen.Count()).
 //		Scan(ctx, &v)
 func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
@@ -321,11 +321,11 @@ func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
 // Example:
 //
 //	var v []struct {
-//		Level string `json:"level,omitempty"`
+//		MemberType string `json:"member_type,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		Select(role.FieldLevel).
+//		Select(role.FieldMemberType).
 //		Scan(ctx, &v)
 func (rq *RoleQuery) Select(fields ...string) *RoleSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)

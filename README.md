@@ -1,6 +1,6 @@
 # Dongle
 
-이후 진행될 work cycle을 위한 설계, 환경 구축, 기술 적용으로 준비 단계<br>
+다음에 진행될 work cycle을 위해 환경 구축, 기술을 적용하는 준비 단계<br>
 
 
 **목차**
@@ -50,7 +50,6 @@ flowchart TD
     end
 
     subgraph Enhancement
-        github_actions_cicd["GitHub Actions CI/CD"]
         container_deployment["Container Deployment"]
     end
 

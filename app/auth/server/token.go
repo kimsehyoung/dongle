@@ -11,10 +11,10 @@ func (s *authService) CreateToken(ctx context.Context, req *authpb.CreateTokenRe
 	return nil, nil
 }
 
-func (s *authService) RefreshToken(ctx context.Context, req *authpb.RefreshTokenRequest) (*authpb.TokenResposne, error) {
+func (s *authService) RefreshToken(ctx context.Context, req *authpb.TokenRequest) (*authpb.TokenResposne, error) {
 	return nil, nil
 }
 
-func (s *authService) RevokeToken(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
+func (s *authService) RevokeToken(ctx context.Context, req *authpb.TokenRequest) (*emptypb.Empty, error) {
 	return nil, nil
 }

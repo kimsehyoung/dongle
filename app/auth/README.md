@@ -67,8 +67,8 @@ https://entgo.io/docs/schema-fields
 
 ## pgx
 
-https://entgo.io/docs/sql-integration/#use-pgx-with-postgresql
-https://github.com/jackc/pgx/wiki/Getting-started-with-pgx#using-a-connection-pool
+- https://entgo.io/docs/sql-integration/#use-pgx-with-postgresql
+- https://github.com/jackc/pgx/wiki/Getting-started-with-pgx#using-a-connection-pool
 
 ## TODO
 

@@ -6,7 +6,7 @@ option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/authpb";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
-
+// #######    Account    #######
 enum Role {
     UNSPECIFIED = 0;
     ADMIN = 1;
@@ -22,11 +22,17 @@ message AccountRequest {
     Role role = 5;
 }
 
+message PasswordRequest {
+    string password = 1;
+    string newPassword = 2;
+}
+
+// #######    Token    #######
 message CreateTokenRequest {
     string email = 1;
     string password = 2;
 }
-message RefreshTokenRequest {
+message TokenRequest {
     string refresh_token = 1;
 }
 message TokenResposne {
@@ -34,41 +40,57 @@ message TokenResposne {
     string refresh_token = 2;
 }
 
+// Config password - getpassword
+// hash account id
+// level -> memberType
+
 
 service Auth {
-    // ### Account ###
+    // #######    Account    #######
     rpc CreateAccount (AccountRequest) returns (google.protobuf.Empty) {
         option (google.api.http) = {
             post: "/accounts"
             body: "*"
         };
     };
-    rpc UpdateAccount (AccountRequest) returns (google.protobuf.Empty) {
+    rpc DeleteAccount (google.protobuf.Empty) returns (google.protobuf.Empty) {
+        // Authorization: Bearer <token>
         option (google.api.http) = {
-            patch: "/accounts/{name}"
+        };
+    };
+    rpc ChangePassword (PasswordRequest) returns (google.protobuf.Empty) {
+        // Authorization: Bearer <token>
+        option (google.api.http) = {
+            put: "/accounts/password"
             body: "*"
         };
     };
-    rpc DeleteAccount (AccountRequest) returns (google.protobuf.Empty) {
+    rpc ConfirmPassword (PasswordRequest) returns (google.protobuf.Empty) {
+        // Authorization: Bearer <token>
         option (google.api.http) = {
-            delete: "/accounts/{name}"
+            post: "/confirmations/password"
+            body: "password"
         };
     };
-    // ### Token ###
+
+    // #######    Token    #######
     rpc CreateToken (CreateTokenRequest) returns (TokenResposne) {
         option (google.api.http) = {
             post: "/auth/token"
             body: "*"
         };
     };
-    rpc RefreshToken (RefreshTokenRequest) returns (TokenResposne) {
+    rpc RefreshToken (TokenRequest) returns (TokenResposne) {
         option (google.api.http) = {
-            get: "/auth/token"
+            post: "/auth/token/refresh"
+            body: "*"
         };
     }
-    rpc RevokeToken (google.protobuf.Empty) returns (google.protobuf.Empty) {
+    rpc RevokeToken (TokenRequest) returns (google.protobuf.Empty) {
+        // Authorization: Bearer <token>
         option (google.api.http) = {
-            delete: "/auth/token"
+            post: "/auth/token/revoke"
+            body: "*"
         };
     };
 }

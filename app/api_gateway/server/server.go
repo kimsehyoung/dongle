@@ -8,10 +8,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
-	"github.com/kimsehyoung/dongle/api/proto/gen/go/testpb"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/auth"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/speech"
-	"github.com/kimsehyoung/dongle/app/api_gateway/server/test"
 	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -34,7 +32,6 @@ type ServiceInfo struct {
 func StartGrpcServer(serviceInfo ServiceInfo) {
 	// Register gRPC server
 	grpcServer := grpc.NewServer()
-	testpb.RegisterTestServer(grpcServer, &test.TestService{TestClient: test.GetTestClient(serviceInfo.TestServiceAddr)})
 	authpb.RegisterAuthServer(grpcServer, &auth.AuthService{AuthClient: auth.GetAuthClient(serviceInfo.AuthServiceAddr)})
 	speechpb.RegisterSpeechServer(grpcServer, &speech.SpeechService{SpeechClient: speech.GetSpeechClient(serviceInfo.SpeechServiceAddr)})
 
@@ -61,11 +58,7 @@ func StartRestServer(serviceInfo ServiceInfo) {
 	opts := []grpc.DialOption{
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
-	err := testpb.RegisterTestHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
-	if err != nil {
-		logger.Fatalf("can't register test service handler: %v", err)
-	}
-	err = authpb.RegisterAuthHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
+	err := authpb.RegisterAuthHandlerFromEndpoint(ctx, mux, "127.0.0.1:"+serviceInfo.GrpcPort, opts)
 	if err != nil {
 		logger.Fatalf("can't register auth service handler: %v", err)
 	}

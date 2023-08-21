@@ -8,8 +8,6 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// The validator is designed to be thread-safe and used as a singleton instance.
-// Refer to auth_service.proto
 type Account struct {
 	Email       string `validate:"required,email"`
 	Name        string `validate:"required,alphaunicode,max=32"`

@@ -49,12 +49,14 @@ func (s *authService) CreateAccount(ctx context.Context, req *authpb.AccountRequ
 	return nil, nil
 }
 
-func (s *authService) UpdateAccount(ctx context.Context, req *authpb.AccountRequest) (*emptypb.Empty, error) {
-	logger.Info(req.Email, req.Name, req.Password, req.PhoneNumber, req.Role)
+func (s *authService) DeleteAccount(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {
 	return nil, nil
 }
 
-func (s *authService) DeleteAccount(ctx context.Context, req *authpb.AccountRequest) (*emptypb.Empty, error) {
-	logger.Info(req.Email, req.Name, req.Password, req.PhoneNumber, req.Role)
+func (s *authService) ChangePassword(ctx context.Context, req *authpb.PasswordRequest) (*emptypb.Empty, error) {
+	return nil, nil
+}
+
+func (s *authService) ConfirmPassword(ctx context.Context, req *authpb.PasswordRequest) (*emptypb.Empty, error) {
 	return nil, nil
 }

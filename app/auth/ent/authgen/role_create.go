@@ -20,9 +20,9 @@ type RoleCreate struct {
 	hooks    []Hook
 }
 
-// SetLevel sets the "level" field.
-func (rc *RoleCreate) SetLevel(s string) *RoleCreate {
-	rc.mutation.SetLevel(s)
+// SetMemberType sets the "member_type" field.
+func (rc *RoleCreate) SetMemberType(s string) *RoleCreate {
+	rc.mutation.SetMemberType(s)
 	return rc
 }
 
@@ -81,8 +81,8 @@ func (rc *RoleCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoleCreate) check() error {
-	if _, ok := rc.mutation.Level(); !ok {
-		return &ValidationError{Name: "level", err: errors.New(`authgen: missing required field "Role.level"`)}
+	if _, ok := rc.mutation.MemberType(); !ok {
+		return &ValidationError{Name: "member_type", err: errors.New(`authgen: missing required field "Role.member_type"`)}
 	}
 	return nil
 }
@@ -116,9 +116,9 @@ func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 		_node.ID = id
 		_spec.ID.Value = id
 	}
-	if value, ok := rc.mutation.Level(); ok {
-		_spec.SetField(role.FieldLevel, field.TypeString, value)
-		_node.Level = value
+	if value, ok := rc.mutation.MemberType(); ok {
+		_spec.SetField(role.FieldMemberType, field.TypeString, value)
+		_node.MemberType = value
 	}
 	if nodes := rc.mutation.AccountsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

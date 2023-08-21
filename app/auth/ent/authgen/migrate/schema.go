@@ -35,7 +35,7 @@ var (
 	// RolesColumns holds the columns for the "roles" table.
 	RolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt32, Increment: true},
-		{Name: "level", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(16)"}},
+		{Name: "member_type", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(16)"}},
 	}
 	// RolesTable holds the schema information for the "roles" table.
 	RolesTable = &schema.Table{

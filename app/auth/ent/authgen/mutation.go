@@ -687,7 +687,7 @@ type RoleMutation struct {
 	op              Op
 	typ             string
 	id              *int32
-	level           *string
+	member_type     *string
 	clearedFields   map[string]struct{}
 	accounts        map[int]struct{}
 	removedaccounts map[int]struct{}
@@ -801,40 +801,40 @@ func (m *RoleMutation) IDs(ctx context.Context) ([]int32, error) {
 	}
 }
 
-// SetLevel sets the "level" field.
-func (m *RoleMutation) SetLevel(s string) {
-	m.level = &s
+// SetMemberType sets the "member_type" field.
+func (m *RoleMutation) SetMemberType(s string) {
+	m.member_type = &s
 }
 
-// Level returns the value of the "level" field in the mutation.
-func (m *RoleMutation) Level() (r string, exists bool) {
-	v := m.level
+// MemberType returns the value of the "member_type" field in the mutation.
+func (m *RoleMutation) MemberType() (r string, exists bool) {
+	v := m.member_type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldLevel returns the old "level" field's value of the Role entity.
+// OldMemberType returns the old "member_type" field's value of the Role entity.
 // If the Role object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RoleMutation) OldLevel(ctx context.Context) (v string, err error) {
+func (m *RoleMutation) OldMemberType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLevel is only allowed on UpdateOne operations")
+		return v, errors.New("OldMemberType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLevel requires an ID field in the mutation")
+		return v, errors.New("OldMemberType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLevel: %w", err)
+		return v, fmt.Errorf("querying old value for OldMemberType: %w", err)
 	}
-	return oldValue.Level, nil
+	return oldValue.MemberType, nil
 }
 
-// ResetLevel resets all changes to the "level" field.
-func (m *RoleMutation) ResetLevel() {
-	m.level = nil
+// ResetMemberType resets all changes to the "member_type" field.
+func (m *RoleMutation) ResetMemberType() {
+	m.member_type = nil
 }
 
 // AddAccountIDs adds the "accounts" edge to the Account entity by ids.
@@ -926,8 +926,8 @@ func (m *RoleMutation) Type() string {
 // AddedFields().
 func (m *RoleMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-	if m.level != nil {
-		fields = append(fields, role.FieldLevel)
+	if m.member_type != nil {
+		fields = append(fields, role.FieldMemberType)
 	}
 	return fields
 }
@@ -937,8 +937,8 @@ func (m *RoleMutation) Fields() []string {
 // schema.
 func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case role.FieldLevel:
-		return m.Level()
+	case role.FieldMemberType:
+		return m.MemberType()
 	}
 	return nil, false
 }
@@ -948,8 +948,8 @@ func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case role.FieldLevel:
-		return m.OldLevel(ctx)
+	case role.FieldMemberType:
+		return m.OldMemberType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Role field %s", name)
 }
@@ -959,12 +959,12 @@ func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *RoleMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case role.FieldLevel:
+	case role.FieldMemberType:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetLevel(v)
+		m.SetMemberType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)
@@ -1015,8 +1015,8 @@ func (m *RoleMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *RoleMutation) ResetField(name string) error {
 	switch name {
-	case role.FieldLevel:
-		m.ResetLevel()
+	case role.FieldMemberType:
+		m.ResetMemberType()
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)

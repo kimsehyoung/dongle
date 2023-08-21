@@ -2,7 +2,7 @@
 erDiagram
     role  {
         integer id PK
-        varchar(16) level
+        varchar(16) member_type
     }
 
     account {

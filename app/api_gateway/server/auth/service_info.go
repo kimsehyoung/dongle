@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"sync"
+
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
 	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
@@ -12,10 +14,18 @@ type AuthService struct {
 	AuthClient authpb.AuthClient
 }
 
+var (
+	once       sync.Once
+	authClient authpb.AuthClient
+)
+
 func GetAuthClient(authServiceAddr string) authpb.AuthClient {
-	conn, err := grpc.Dial(authServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		logger.Errorf("can't dial to Auth Serivce (%s) %v", authServiceAddr, err)
-	}
-	return authpb.NewAuthClient(conn)
+	once.Do(func() {
+		conn, err := grpc.Dial(authServiceAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			logger.Errorf("can't dial to Auth Serivce (%s) %v", authServiceAddr, err)
+		}
+		authClient = authpb.NewAuthClient(conn)
+	})
+	return authClient
 }

@@ -16,7 +16,7 @@ type Role struct {
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("id"),
-		field.String("level").
+		field.String("member_type").
 			Unique().
 			SchemaType(map[string]string{
 				dialect.Postgres: "varchar(16)",

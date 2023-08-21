@@ -12,8 +12,8 @@ const (
 	Label = "role"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldLevel holds the string denoting the level field in the database.
-	FieldLevel = "level"
+	// FieldMemberType holds the string denoting the member_type field in the database.
+	FieldMemberType = "member_type"
 	// EdgeAccounts holds the string denoting the accounts edge name in mutations.
 	EdgeAccounts = "accounts"
 	// Table holds the table name of the role in the database.
@@ -30,7 +30,7 @@ const (
 // Columns holds all SQL columns for role fields.
 var Columns = []string{
 	FieldID,
-	FieldLevel,
+	FieldMemberType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -51,9 +51,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByLevel orders the results by the level field.
-func ByLevel(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLevel, opts...).ToFunc()
+// ByMemberType orders the results by the member_type field.
+func ByMemberType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMemberType, opts...).ToFunc()
 }
 
 // ByAccountsCount orders the results by accounts count.

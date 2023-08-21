@@ -16,8 +16,8 @@ type Role struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int32 `json:"id,omitempty"`
-	// Level holds the value of the "level" field.
-	Level string `json:"level,omitempty"`
+	// MemberType holds the value of the "member_type" field.
+	MemberType string `json:"member_type,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RoleQuery when eager-loading is set.
 	Edges        RoleEdges `json:"edges"`
@@ -49,7 +49,7 @@ func (*Role) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case role.FieldID:
 			values[i] = new(sql.NullInt64)
-		case role.FieldLevel:
+		case role.FieldMemberType:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -72,11 +72,11 @@ func (r *Role) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			r.ID = int32(value.Int64)
-		case role.FieldLevel:
+		case role.FieldMemberType:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field level", values[i])
+				return fmt.Errorf("unexpected type %T for field member_type", values[i])
 			} else if value.Valid {
-				r.Level = value.String
+				r.MemberType = value.String
 			}
 		default:
 			r.selectValues.Set(columns[i], values[i])
@@ -119,8 +119,8 @@ func (r *Role) String() string {
 	var builder strings.Builder
 	builder.WriteString("Role(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", r.ID))
-	builder.WriteString("level=")
-	builder.WriteString(r.Level)
+	builder.WriteString("member_type=")
+	builder.WriteString(r.MemberType)
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -28,9 +28,9 @@ func (ru *RoleUpdate) Where(ps ...predicate.Role) *RoleUpdate {
 	return ru
 }
 
-// SetLevel sets the "level" field.
-func (ru *RoleUpdate) SetLevel(s string) *RoleUpdate {
-	ru.mutation.SetLevel(s)
+// SetMemberType sets the "member_type" field.
+func (ru *RoleUpdate) SetMemberType(s string) *RoleUpdate {
+	ru.mutation.SetMemberType(s)
 	return ru
 }
 
@@ -111,8 +111,8 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := ru.mutation.Level(); ok {
-		_spec.SetField(role.FieldLevel, field.TypeString, value)
+	if value, ok := ru.mutation.MemberType(); ok {
+		_spec.SetField(role.FieldMemberType, field.TypeString, value)
 	}
 	if ru.mutation.AccountsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -179,9 +179,9 @@ type RoleUpdateOne struct {
 	mutation *RoleMutation
 }
 
-// SetLevel sets the "level" field.
-func (ruo *RoleUpdateOne) SetLevel(s string) *RoleUpdateOne {
-	ruo.mutation.SetLevel(s)
+// SetMemberType sets the "member_type" field.
+func (ruo *RoleUpdateOne) SetMemberType(s string) *RoleUpdateOne {
+	ruo.mutation.SetMemberType(s)
 	return ruo
 }
 
@@ -292,8 +292,8 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			}
 		}
 	}
-	if value, ok := ruo.mutation.Level(); ok {
-		_spec.SetField(role.FieldLevel, field.TypeString, value)
+	if value, ok := ruo.mutation.MemberType(); ok {
+		_spec.SetField(role.FieldMemberType, field.TypeString, value)
 	}
 	if ruo.mutation.AccountsCleared() {
 		edge := &sqlgraph.EdgeSpec{
