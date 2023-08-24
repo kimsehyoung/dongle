@@ -5,6 +5,8 @@ import (
 	"net"
 	"net/http"
 
+	auth_interceptor "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/selector"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
@@ -12,6 +14,7 @@ import (
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/speech"
 	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -30,8 +33,25 @@ type ServiceInfo struct {
 }
 
 func StartGrpcServer(serviceInfo ServiceInfo) {
-	// Register gRPC server
-	grpcServer := grpc.NewServer()
+
+	// Configure gRPC server
+	opts := []grpc.ServerOption{
+		// https://github.dev/grpc-ecosystem/go-grpc-middleware/blob/main/interceptors/auth/auth.go
+		// https://pkg.go.dev/github.com/grpc-ecosystem/go-grpc-middleware/v2#section-readme
+		grpc.ChainUnaryInterceptor(
+			selector.UnaryServerInterceptor(auth_interceptor.UnaryServerInterceptor(auth.AuthInterceptor), selector.MatchFunc(auth.AuthSkip)),
+		),
+	}
+	if serviceInfo.TlsEnabled {
+		creds, err := credentials.NewServerTLSFromFile(serviceInfo.CrtFilePath, serviceInfo.KeyFilePath)
+		if err != nil {
+			logger.Fatalf("TLS configure error: %v", err)
+		}
+		opts = append(opts, grpc.Creds(creds))
+	}
+	grpcServer := grpc.NewServer(opts...)
+
+	// Register servicesb
 	authpb.RegisterAuthServer(grpcServer, &auth.AuthService{AuthClient: auth.GetAuthClient(serviceInfo.AuthServiceAddr)})
 	speechpb.RegisterSpeechServer(grpcServer, &speech.SpeechService{SpeechClient: speech.GetSpeechClient(serviceInfo.SpeechServiceAddr)})
 

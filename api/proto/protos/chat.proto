@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package dongle.auth;
+package dongle.chat;
 option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/chatpb";
 
 service Chat {

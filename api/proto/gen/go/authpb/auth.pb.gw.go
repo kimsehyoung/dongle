@@ -342,7 +342,7 @@ func RegisterAuthHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/CreateToken", runtime.WithHTTPPathPattern("/auth/token"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/CreateToken", runtime.WithHTTPPathPattern("/login/token"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -367,7 +367,7 @@ func RegisterAuthHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/RefreshToken", runtime.WithHTTPPathPattern("/auth/token/refresh"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/RefreshToken", runtime.WithHTTPPathPattern("/login/token/refresh"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -392,7 +392,7 @@ func RegisterAuthHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/RevokeToken", runtime.WithHTTPPathPattern("/auth/token/revoke"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/dongle.auth.Auth/RevokeToken", runtime.WithHTTPPathPattern("/login/token/revoke"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -522,7 +522,7 @@ func RegisterAuthHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/CreateToken", runtime.WithHTTPPathPattern("/auth/token"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/CreateToken", runtime.WithHTTPPathPattern("/login/token"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -544,7 +544,7 @@ func RegisterAuthHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/RefreshToken", runtime.WithHTTPPathPattern("/auth/token/refresh"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/RefreshToken", runtime.WithHTTPPathPattern("/login/token/refresh"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -566,7 +566,7 @@ func RegisterAuthHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/RevokeToken", runtime.WithHTTPPathPattern("/auth/token/revoke"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/dongle.auth.Auth/RevokeToken", runtime.WithHTTPPathPattern("/login/token/revoke"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -592,11 +592,11 @@ var (
 
 	pattern_Auth_ConfirmPassword_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"confirmations", "password"}, ""))
 
-	pattern_Auth_CreateToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"auth", "token"}, ""))
+	pattern_Auth_CreateToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"login", "token"}, ""))
 
-	pattern_Auth_RefreshToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"auth", "token", "refresh"}, ""))
+	pattern_Auth_RefreshToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"login", "token", "refresh"}, ""))
 
-	pattern_Auth_RevokeToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"auth", "token", "revoke"}, ""))
+	pattern_Auth_RevokeToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"login", "token", "revoke"}, ""))
 )
 
 var (

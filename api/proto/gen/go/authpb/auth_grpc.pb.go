@@ -38,7 +38,7 @@ type AuthClient interface {
 	DeleteAccount(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ChangePassword(ctx context.Context, in *PasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ConfirmPassword(ctx context.Context, in *PasswordRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	// #######    Token    #######
+	// #######    Login    #######
 	CreateToken(ctx context.Context, in *CreateTokenRequest, opts ...grpc.CallOption) (*TokenResposne, error)
 	RefreshToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*TokenResposne, error)
 	RevokeToken(ctx context.Context, in *TokenRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
@@ -124,7 +124,7 @@ type AuthServer interface {
 	DeleteAccount(context.Context, *emptypb.Empty) (*emptypb.Empty, error)
 	ChangePassword(context.Context, *PasswordRequest) (*emptypb.Empty, error)
 	ConfirmPassword(context.Context, *PasswordRequest) (*emptypb.Empty, error)
-	// #######    Token    #######
+	// #######    Login    #######
 	CreateToken(context.Context, *CreateTokenRequest) (*TokenResposne, error)
 	RefreshToken(context.Context, *TokenRequest) (*TokenResposne, error)
 	RevokeToken(context.Context, *TokenRequest) (*emptypb.Empty, error)

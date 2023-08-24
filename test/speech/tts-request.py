@@ -1,11 +1,17 @@
 import requests
 import time
+import os
 
 url = "http://localhost:10001/text/synthesize"
+
+token = os.environ.get("JWT", "")
 
 headers = {
     "Content-Type": "application/json"
 }
+if token:
+    headers["Authorization"] = f"Bearer {token}"
+
 data = {
     "language": "en",
     "text": "Hello test",

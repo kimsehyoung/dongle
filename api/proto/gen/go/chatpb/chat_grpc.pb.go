@@ -59,7 +59,7 @@ func RegisterChatServer(s grpc.ServiceRegistrar, srv ChatServer) {
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Chat_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "dongle.auth.Chat",
+	ServiceName: "dongle.chat.Chat",
 	HandlerType: (*ChatServer)(nil),
 	Methods:     []grpc.MethodDesc{},
 	Streams:     []grpc.StreamDesc{},

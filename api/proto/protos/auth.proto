@@ -15,11 +15,12 @@ enum Role {
 }
 
 message AccountRequest {
-    string email = 1;
+    string login_id = 1;
     string name = 2;
     string password = 3;
-    string phone_number = 4;
-    Role role = 5;
+    string email = 4;
+    string phone_number = 5;
+    Role role = 6;
 }
 
 message PasswordRequest {
@@ -29,7 +30,7 @@ message PasswordRequest {
 
 // #######    Token    #######
 message CreateTokenRequest {
-    string email = 1;
+    string login_id = 1;
     string password = 2;
 }
 message TokenRequest {
@@ -73,23 +74,23 @@ service Auth {
         };
     };
 
-    // #######    Token    #######
+    // #######    Login    #######
     rpc CreateToken (CreateTokenRequest) returns (TokenResposne) {
         option (google.api.http) = {
-            post: "/auth/token"
+            post: "/login/token"
             body: "*"
         };
     };
     rpc RefreshToken (TokenRequest) returns (TokenResposne) {
         option (google.api.http) = {
-            post: "/auth/token/refresh"
+            post: "/login/token/refresh"
             body: "*"
         };
     }
     rpc RevokeToken (TokenRequest) returns (google.protobuf.Empty) {
         // Authorization: Bearer <token>
         option (google.api.http) = {
-            post: "/auth/token/revoke"
+            post: "/login/token/revoke"
             body: "*"
         };
     };
