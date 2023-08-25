@@ -21,7 +21,8 @@
 #### Account
 - email
     - A length limit of email address (https://datatracker.ietf.org/doc/html/rfc3696#section-3)
-
+- validator
+    - 계정 생성 유효성 검사는 API서버에서 "복잡도", "형식" 같른 로직을 처리하고, DB에서는 무결성 검증
 
 
 

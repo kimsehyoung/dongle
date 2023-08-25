@@ -11,9 +11,10 @@ var (
 	// AccountsColumns holds the columns for the "accounts" table.
 	AccountsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "email", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(32)"}},
-		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(32)"}},
+		{Name: "login_id", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(32)"}},
 		{Name: "hashed_password", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(32)"}},
+		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(32)"}},
+		{Name: "email", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(320)"}},
 		{Name: "phone_number", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(32)"}},
 		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "role_id", Type: field.TypeInt32},
@@ -26,7 +27,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "accounts_roles_accounts",
-				Columns:    []*schema.Column{AccountsColumns[6]},
+				Columns:    []*schema.Column{AccountsColumns[7]},
 				RefColumns: []*schema.Column{RolesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},

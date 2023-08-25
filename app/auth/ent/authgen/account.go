@@ -20,12 +20,14 @@ type Account struct {
 	ID int `json:"id,omitempty"`
 	// RoleID holds the value of the "role_id" field.
 	RoleID int32 `json:"role_id,omitempty"`
-	// Email holds the value of the "email" field.
-	Email string `json:"email,omitempty"`
-	// Name holds the value of the "name" field.
-	Name string `json:"name,omitempty"`
+	// LoginID holds the value of the "login_id" field.
+	LoginID string `json:"login_id,omitempty"`
 	// HashedPassword holds the value of the "hashed_password" field.
 	HashedPassword string `json:"hashed_password,omitempty"`
+	// Name holds the value of the "name" field.
+	Name string `json:"name,omitempty"`
+	// Email holds the value of the "email" field.
+	Email string `json:"email,omitempty"`
 	// PhoneNumber holds the value of the "phone_number" field.
 	PhoneNumber string `json:"phone_number,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
@@ -65,7 +67,7 @@ func (*Account) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case account.FieldID, account.FieldRoleID:
 			values[i] = new(sql.NullInt64)
-		case account.FieldEmail, account.FieldName, account.FieldHashedPassword, account.FieldPhoneNumber:
+		case account.FieldLoginID, account.FieldHashedPassword, account.FieldName, account.FieldEmail, account.FieldPhoneNumber:
 			values[i] = new(sql.NullString)
 		case account.FieldCreatedAt:
 			values[i] = new(sql.NullTime)
@@ -96,11 +98,17 @@ func (a *Account) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.RoleID = int32(value.Int64)
 			}
-		case account.FieldEmail:
+		case account.FieldLoginID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field email", values[i])
+				return fmt.Errorf("unexpected type %T for field login_id", values[i])
 			} else if value.Valid {
-				a.Email = value.String
+				a.LoginID = value.String
+			}
+		case account.FieldHashedPassword:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field hashed_password", values[i])
+			} else if value.Valid {
+				a.HashedPassword = value.String
 			}
 		case account.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -108,11 +116,11 @@ func (a *Account) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				a.Name = value.String
 			}
-		case account.FieldHashedPassword:
+		case account.FieldEmail:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field hashed_password", values[i])
+				return fmt.Errorf("unexpected type %T for field email", values[i])
 			} else if value.Valid {
-				a.HashedPassword = value.String
+				a.Email = value.String
 			}
 		case account.FieldPhoneNumber:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -170,14 +178,17 @@ func (a *Account) String() string {
 	builder.WriteString("role_id=")
 	builder.WriteString(fmt.Sprintf("%v", a.RoleID))
 	builder.WriteString(", ")
-	builder.WriteString("email=")
-	builder.WriteString(a.Email)
+	builder.WriteString("login_id=")
+	builder.WriteString(a.LoginID)
+	builder.WriteString(", ")
+	builder.WriteString("hashed_password=")
+	builder.WriteString(a.HashedPassword)
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(a.Name)
 	builder.WriteString(", ")
-	builder.WriteString("hashed_password=")
-	builder.WriteString(a.HashedPassword)
+	builder.WriteString("email=")
+	builder.WriteString(a.Email)
 	builder.WriteString(", ")
 	builder.WriteString("phone_number=")
 	builder.WriteString(a.PhoneNumber)

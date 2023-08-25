@@ -35,9 +35,10 @@ type AccountMutation struct {
 	op              Op
 	typ             string
 	id              *int
-	email           *string
-	name            *string
+	login_id        *string
 	hashed_password *string
+	name            *string
+	email           *string
 	phone_number    *string
 	created_at      *time.Time
 	clearedFields   map[string]struct{}
@@ -182,40 +183,76 @@ func (m *AccountMutation) ResetRoleID() {
 	m.role = nil
 }
 
-// SetEmail sets the "email" field.
-func (m *AccountMutation) SetEmail(s string) {
-	m.email = &s
+// SetLoginID sets the "login_id" field.
+func (m *AccountMutation) SetLoginID(s string) {
+	m.login_id = &s
 }
 
-// Email returns the value of the "email" field in the mutation.
-func (m *AccountMutation) Email() (r string, exists bool) {
-	v := m.email
+// LoginID returns the value of the "login_id" field in the mutation.
+func (m *AccountMutation) LoginID() (r string, exists bool) {
+	v := m.login_id
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEmail returns the old "email" field's value of the Account entity.
+// OldLoginID returns the old "login_id" field's value of the Account entity.
 // If the Account object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldEmail(ctx context.Context) (v string, err error) {
+func (m *AccountMutation) OldLoginID(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
+		return v, errors.New("OldLoginID is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmail requires an ID field in the mutation")
+		return v, errors.New("OldLoginID requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
+		return v, fmt.Errorf("querying old value for OldLoginID: %w", err)
 	}
-	return oldValue.Email, nil
+	return oldValue.LoginID, nil
 }
 
-// ResetEmail resets all changes to the "email" field.
-func (m *AccountMutation) ResetEmail() {
-	m.email = nil
+// ResetLoginID resets all changes to the "login_id" field.
+func (m *AccountMutation) ResetLoginID() {
+	m.login_id = nil
+}
+
+// SetHashedPassword sets the "hashed_password" field.
+func (m *AccountMutation) SetHashedPassword(s string) {
+	m.hashed_password = &s
+}
+
+// HashedPassword returns the value of the "hashed_password" field in the mutation.
+func (m *AccountMutation) HashedPassword() (r string, exists bool) {
+	v := m.hashed_password
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHashedPassword returns the old "hashed_password" field's value of the Account entity.
+// If the Account object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *AccountMutation) OldHashedPassword(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldHashedPassword is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldHashedPassword requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHashedPassword: %w", err)
+	}
+	return oldValue.HashedPassword, nil
+}
+
+// ResetHashedPassword resets all changes to the "hashed_password" field.
+func (m *AccountMutation) ResetHashedPassword() {
+	m.hashed_password = nil
 }
 
 // SetName sets the "name" field.
@@ -254,40 +291,40 @@ func (m *AccountMutation) ResetName() {
 	m.name = nil
 }
 
-// SetHashedPassword sets the "hashed_password" field.
-func (m *AccountMutation) SetHashedPassword(s string) {
-	m.hashed_password = &s
+// SetEmail sets the "email" field.
+func (m *AccountMutation) SetEmail(s string) {
+	m.email = &s
 }
 
-// HashedPassword returns the value of the "hashed_password" field in the mutation.
-func (m *AccountMutation) HashedPassword() (r string, exists bool) {
-	v := m.hashed_password
+// Email returns the value of the "email" field in the mutation.
+func (m *AccountMutation) Email() (r string, exists bool) {
+	v := m.email
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldHashedPassword returns the old "hashed_password" field's value of the Account entity.
+// OldEmail returns the old "email" field's value of the Account entity.
 // If the Account object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldHashedPassword(ctx context.Context) (v string, err error) {
+func (m *AccountMutation) OldEmail(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldHashedPassword is only allowed on UpdateOne operations")
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldHashedPassword requires an ID field in the mutation")
+		return v, errors.New("OldEmail requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldHashedPassword: %w", err)
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
 	}
-	return oldValue.HashedPassword, nil
+	return oldValue.Email, nil
 }
 
-// ResetHashedPassword resets all changes to the "hashed_password" field.
-func (m *AccountMutation) ResetHashedPassword() {
-	m.hashed_password = nil
+// ResetEmail resets all changes to the "email" field.
+func (m *AccountMutation) ResetEmail() {
+	m.email = nil
 }
 
 // SetPhoneNumber sets the "phone_number" field.
@@ -422,18 +459,21 @@ func (m *AccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AccountMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
 	if m.role != nil {
 		fields = append(fields, account.FieldRoleID)
 	}
-	if m.email != nil {
-		fields = append(fields, account.FieldEmail)
+	if m.login_id != nil {
+		fields = append(fields, account.FieldLoginID)
+	}
+	if m.hashed_password != nil {
+		fields = append(fields, account.FieldHashedPassword)
 	}
 	if m.name != nil {
 		fields = append(fields, account.FieldName)
 	}
-	if m.hashed_password != nil {
-		fields = append(fields, account.FieldHashedPassword)
+	if m.email != nil {
+		fields = append(fields, account.FieldEmail)
 	}
 	if m.phone_number != nil {
 		fields = append(fields, account.FieldPhoneNumber)
@@ -451,12 +491,14 @@ func (m *AccountMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case account.FieldRoleID:
 		return m.RoleID()
-	case account.FieldEmail:
-		return m.Email()
-	case account.FieldName:
-		return m.Name()
+	case account.FieldLoginID:
+		return m.LoginID()
 	case account.FieldHashedPassword:
 		return m.HashedPassword()
+	case account.FieldName:
+		return m.Name()
+	case account.FieldEmail:
+		return m.Email()
 	case account.FieldPhoneNumber:
 		return m.PhoneNumber()
 	case account.FieldCreatedAt:
@@ -472,12 +514,14 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case account.FieldRoleID:
 		return m.OldRoleID(ctx)
-	case account.FieldEmail:
-		return m.OldEmail(ctx)
-	case account.FieldName:
-		return m.OldName(ctx)
+	case account.FieldLoginID:
+		return m.OldLoginID(ctx)
 	case account.FieldHashedPassword:
 		return m.OldHashedPassword(ctx)
+	case account.FieldName:
+		return m.OldName(ctx)
+	case account.FieldEmail:
+		return m.OldEmail(ctx)
 	case account.FieldPhoneNumber:
 		return m.OldPhoneNumber(ctx)
 	case account.FieldCreatedAt:
@@ -498,12 +542,19 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetRoleID(v)
 		return nil
-	case account.FieldEmail:
+	case account.FieldLoginID:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEmail(v)
+		m.SetLoginID(v)
+		return nil
+	case account.FieldHashedPassword:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHashedPassword(v)
 		return nil
 	case account.FieldName:
 		v, ok := value.(string)
@@ -512,12 +563,12 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetName(v)
 		return nil
-	case account.FieldHashedPassword:
+	case account.FieldEmail:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetHashedPassword(v)
+		m.SetEmail(v)
 		return nil
 	case account.FieldPhoneNumber:
 		v, ok := value.(string)
@@ -588,14 +639,17 @@ func (m *AccountMutation) ResetField(name string) error {
 	case account.FieldRoleID:
 		m.ResetRoleID()
 		return nil
-	case account.FieldEmail:
-		m.ResetEmail()
+	case account.FieldLoginID:
+		m.ResetLoginID()
+		return nil
+	case account.FieldHashedPassword:
+		m.ResetHashedPassword()
 		return nil
 	case account.FieldName:
 		m.ResetName()
 		return nil
-	case account.FieldHashedPassword:
-		m.ResetHashedPassword()
+	case account.FieldEmail:
+		m.ResetEmail()
 		return nil
 	case account.FieldPhoneNumber:
 		m.ResetPhoneNumber()

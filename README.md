@@ -197,7 +197,7 @@ style chatbot_service fill:#83502E
 | protobuf           | BSD-3-Clause          | Google's data interchange format     | https://github.com/protocolbuffers/protobuf-go  |
 | grpc               | Apache-2.0            | HTTP/2 based RPC                     | https://github.com/grpc/grpc-go                 |
 | grpc-gateway       | BSD-3-Clause          | RESTful API into gRPC                | https://github.com/grpc-ecosystem/grpc-gateway  |
-| go-grpc-middleware | Apache-2.0            | Go gRPC interceptor auth, logging... | github.com/grpc-ecosystem/go-grpc-middleware/v2 |
+| go-grpc-middleware | Apache-2.0            | Go gRPC interceptor auth, logging... | https://github.com/grpc-ecosystem/go-grpc-middleware/v2 |
 | validator          | MIT                   | Go Struct and Field validation       | https://github.com/go-playground/validator      |
 | postgres           | similar to BSD or MIT | RDBMS                                | https://github.com/postgres/postgres            |
 | ent                | Apache-2.0            | An entity framework for Go           | https://github.com/ent/ent                      |

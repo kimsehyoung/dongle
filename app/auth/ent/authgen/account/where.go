@@ -60,9 +60,14 @@ func RoleID(v int32) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldRoleID, v))
 }
 
-// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
-func Email(v string) predicate.Account {
-	return predicate.Account(sql.FieldEQ(FieldEmail, v))
+// LoginID applies equality check predicate on the "login_id" field. It's identical to LoginIDEQ.
+func LoginID(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldLoginID, v))
+}
+
+// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
+func HashedPassword(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldHashedPassword, v))
 }
 
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
@@ -70,9 +75,9 @@ func Name(v string) predicate.Account {
 	return predicate.Account(sql.FieldEQ(FieldName, v))
 }
 
-// HashedPassword applies equality check predicate on the "hashed_password" field. It's identical to HashedPasswordEQ.
-func HashedPassword(v string) predicate.Account {
-	return predicate.Account(sql.FieldEQ(FieldHashedPassword, v))
+// Email applies equality check predicate on the "email" field. It's identical to EmailEQ.
+func Email(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldEmail, v))
 }
 
 // PhoneNumber applies equality check predicate on the "phone_number" field. It's identical to PhoneNumberEQ.
@@ -105,69 +110,134 @@ func RoleIDNotIn(vs ...int32) predicate.Account {
 	return predicate.Account(sql.FieldNotIn(FieldRoleID, vs...))
 }
 
-// EmailEQ applies the EQ predicate on the "email" field.
-func EmailEQ(v string) predicate.Account {
-	return predicate.Account(sql.FieldEQ(FieldEmail, v))
+// LoginIDEQ applies the EQ predicate on the "login_id" field.
+func LoginIDEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldLoginID, v))
 }
 
-// EmailNEQ applies the NEQ predicate on the "email" field.
-func EmailNEQ(v string) predicate.Account {
-	return predicate.Account(sql.FieldNEQ(FieldEmail, v))
+// LoginIDNEQ applies the NEQ predicate on the "login_id" field.
+func LoginIDNEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldLoginID, v))
 }
 
-// EmailIn applies the In predicate on the "email" field.
-func EmailIn(vs ...string) predicate.Account {
-	return predicate.Account(sql.FieldIn(FieldEmail, vs...))
+// LoginIDIn applies the In predicate on the "login_id" field.
+func LoginIDIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldIn(FieldLoginID, vs...))
 }
 
-// EmailNotIn applies the NotIn predicate on the "email" field.
-func EmailNotIn(vs ...string) predicate.Account {
-	return predicate.Account(sql.FieldNotIn(FieldEmail, vs...))
+// LoginIDNotIn applies the NotIn predicate on the "login_id" field.
+func LoginIDNotIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldNotIn(FieldLoginID, vs...))
 }
 
-// EmailGT applies the GT predicate on the "email" field.
-func EmailGT(v string) predicate.Account {
-	return predicate.Account(sql.FieldGT(FieldEmail, v))
+// LoginIDGT applies the GT predicate on the "login_id" field.
+func LoginIDGT(v string) predicate.Account {
+	return predicate.Account(sql.FieldGT(FieldLoginID, v))
 }
 
-// EmailGTE applies the GTE predicate on the "email" field.
-func EmailGTE(v string) predicate.Account {
-	return predicate.Account(sql.FieldGTE(FieldEmail, v))
+// LoginIDGTE applies the GTE predicate on the "login_id" field.
+func LoginIDGTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldGTE(FieldLoginID, v))
 }
 
-// EmailLT applies the LT predicate on the "email" field.
-func EmailLT(v string) predicate.Account {
-	return predicate.Account(sql.FieldLT(FieldEmail, v))
+// LoginIDLT applies the LT predicate on the "login_id" field.
+func LoginIDLT(v string) predicate.Account {
+	return predicate.Account(sql.FieldLT(FieldLoginID, v))
 }
 
-// EmailLTE applies the LTE predicate on the "email" field.
-func EmailLTE(v string) predicate.Account {
-	return predicate.Account(sql.FieldLTE(FieldEmail, v))
+// LoginIDLTE applies the LTE predicate on the "login_id" field.
+func LoginIDLTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldLTE(FieldLoginID, v))
 }
 
-// EmailContains applies the Contains predicate on the "email" field.
-func EmailContains(v string) predicate.Account {
-	return predicate.Account(sql.FieldContains(FieldEmail, v))
+// LoginIDContains applies the Contains predicate on the "login_id" field.
+func LoginIDContains(v string) predicate.Account {
+	return predicate.Account(sql.FieldContains(FieldLoginID, v))
 }
 
-// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
-func EmailHasPrefix(v string) predicate.Account {
-	return predicate.Account(sql.FieldHasPrefix(FieldEmail, v))
+// LoginIDHasPrefix applies the HasPrefix predicate on the "login_id" field.
+func LoginIDHasPrefix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasPrefix(FieldLoginID, v))
 }
 
-// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
-func EmailHasSuffix(v string) predicate.Account {
-	return predicate.Account(sql.FieldHasSuffix(FieldEmail, v))
+// LoginIDHasSuffix applies the HasSuffix predicate on the "login_id" field.
+func LoginIDHasSuffix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasSuffix(FieldLoginID, v))
 }
 
-// EmailEqualFold applies the EqualFold predicate on the "email" field.
-func EmailEqualFold(v string) predicate.Account {
-	return predicate.Account(sql.FieldEqualFold(FieldEmail, v))
+// LoginIDEqualFold applies the EqualFold predicate on the "login_id" field.
+func LoginIDEqualFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldEqualFold(FieldLoginID, v))
 }
 
-// EmailContainsFold applies the ContainsFold predicate on the "email" field.
-func EmailContainsFold(v string) predicate.Account {
-	return predicate.Account(sql.FieldContainsFold(FieldEmail, v))
+// LoginIDContainsFold applies the ContainsFold predicate on the "login_id" field.
+func LoginIDContainsFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldContainsFold(FieldLoginID, v))
+}
+
+// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
+func HashedPasswordEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
+func HashedPasswordNEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldHashedPassword, v))
+}
+
+// HashedPasswordIn applies the In predicate on the "hashed_password" field.
+func HashedPasswordIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
+func HashedPasswordNotIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldNotIn(FieldHashedPassword, vs...))
+}
+
+// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
+func HashedPasswordGT(v string) predicate.Account {
+	return predicate.Account(sql.FieldGT(FieldHashedPassword, v))
+}
+
+// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
+func HashedPasswordGTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldGTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
+func HashedPasswordLT(v string) predicate.Account {
+	return predicate.Account(sql.FieldLT(FieldHashedPassword, v))
+}
+
+// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
+func HashedPasswordLTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldLTE(FieldHashedPassword, v))
+}
+
+// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
+func HashedPasswordContains(v string) predicate.Account {
+	return predicate.Account(sql.FieldContains(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
+func HashedPasswordHasPrefix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasPrefix(FieldHashedPassword, v))
+}
+
+// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
+func HashedPasswordHasSuffix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasSuffix(FieldHashedPassword, v))
+}
+
+// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
+func HashedPasswordEqualFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldEqualFold(FieldHashedPassword, v))
+}
+
+// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
+func HashedPasswordContainsFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldContainsFold(FieldHashedPassword, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -235,69 +305,69 @@ func NameContainsFold(v string) predicate.Account {
 	return predicate.Account(sql.FieldContainsFold(FieldName, v))
 }
 
-// HashedPasswordEQ applies the EQ predicate on the "hashed_password" field.
-func HashedPasswordEQ(v string) predicate.Account {
-	return predicate.Account(sql.FieldEQ(FieldHashedPassword, v))
+// EmailEQ applies the EQ predicate on the "email" field.
+func EmailEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldEQ(FieldEmail, v))
 }
 
-// HashedPasswordNEQ applies the NEQ predicate on the "hashed_password" field.
-func HashedPasswordNEQ(v string) predicate.Account {
-	return predicate.Account(sql.FieldNEQ(FieldHashedPassword, v))
+// EmailNEQ applies the NEQ predicate on the "email" field.
+func EmailNEQ(v string) predicate.Account {
+	return predicate.Account(sql.FieldNEQ(FieldEmail, v))
 }
 
-// HashedPasswordIn applies the In predicate on the "hashed_password" field.
-func HashedPasswordIn(vs ...string) predicate.Account {
-	return predicate.Account(sql.FieldIn(FieldHashedPassword, vs...))
+// EmailIn applies the In predicate on the "email" field.
+func EmailIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldIn(FieldEmail, vs...))
 }
 
-// HashedPasswordNotIn applies the NotIn predicate on the "hashed_password" field.
-func HashedPasswordNotIn(vs ...string) predicate.Account {
-	return predicate.Account(sql.FieldNotIn(FieldHashedPassword, vs...))
+// EmailNotIn applies the NotIn predicate on the "email" field.
+func EmailNotIn(vs ...string) predicate.Account {
+	return predicate.Account(sql.FieldNotIn(FieldEmail, vs...))
 }
 
-// HashedPasswordGT applies the GT predicate on the "hashed_password" field.
-func HashedPasswordGT(v string) predicate.Account {
-	return predicate.Account(sql.FieldGT(FieldHashedPassword, v))
+// EmailGT applies the GT predicate on the "email" field.
+func EmailGT(v string) predicate.Account {
+	return predicate.Account(sql.FieldGT(FieldEmail, v))
 }
 
-// HashedPasswordGTE applies the GTE predicate on the "hashed_password" field.
-func HashedPasswordGTE(v string) predicate.Account {
-	return predicate.Account(sql.FieldGTE(FieldHashedPassword, v))
+// EmailGTE applies the GTE predicate on the "email" field.
+func EmailGTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldGTE(FieldEmail, v))
 }
 
-// HashedPasswordLT applies the LT predicate on the "hashed_password" field.
-func HashedPasswordLT(v string) predicate.Account {
-	return predicate.Account(sql.FieldLT(FieldHashedPassword, v))
+// EmailLT applies the LT predicate on the "email" field.
+func EmailLT(v string) predicate.Account {
+	return predicate.Account(sql.FieldLT(FieldEmail, v))
 }
 
-// HashedPasswordLTE applies the LTE predicate on the "hashed_password" field.
-func HashedPasswordLTE(v string) predicate.Account {
-	return predicate.Account(sql.FieldLTE(FieldHashedPassword, v))
+// EmailLTE applies the LTE predicate on the "email" field.
+func EmailLTE(v string) predicate.Account {
+	return predicate.Account(sql.FieldLTE(FieldEmail, v))
 }
 
-// HashedPasswordContains applies the Contains predicate on the "hashed_password" field.
-func HashedPasswordContains(v string) predicate.Account {
-	return predicate.Account(sql.FieldContains(FieldHashedPassword, v))
+// EmailContains applies the Contains predicate on the "email" field.
+func EmailContains(v string) predicate.Account {
+	return predicate.Account(sql.FieldContains(FieldEmail, v))
 }
 
-// HashedPasswordHasPrefix applies the HasPrefix predicate on the "hashed_password" field.
-func HashedPasswordHasPrefix(v string) predicate.Account {
-	return predicate.Account(sql.FieldHasPrefix(FieldHashedPassword, v))
+// EmailHasPrefix applies the HasPrefix predicate on the "email" field.
+func EmailHasPrefix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasPrefix(FieldEmail, v))
 }
 
-// HashedPasswordHasSuffix applies the HasSuffix predicate on the "hashed_password" field.
-func HashedPasswordHasSuffix(v string) predicate.Account {
-	return predicate.Account(sql.FieldHasSuffix(FieldHashedPassword, v))
+// EmailHasSuffix applies the HasSuffix predicate on the "email" field.
+func EmailHasSuffix(v string) predicate.Account {
+	return predicate.Account(sql.FieldHasSuffix(FieldEmail, v))
 }
 
-// HashedPasswordEqualFold applies the EqualFold predicate on the "hashed_password" field.
-func HashedPasswordEqualFold(v string) predicate.Account {
-	return predicate.Account(sql.FieldEqualFold(FieldHashedPassword, v))
+// EmailEqualFold applies the EqualFold predicate on the "email" field.
+func EmailEqualFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldEqualFold(FieldEmail, v))
 }
 
-// HashedPasswordContainsFold applies the ContainsFold predicate on the "hashed_password" field.
-func HashedPasswordContainsFold(v string) predicate.Account {
-	return predicate.Account(sql.FieldContainsFold(FieldHashedPassword, v))
+// EmailContainsFold applies the ContainsFold predicate on the "email" field.
+func EmailContainsFold(v string) predicate.Account {
+	return predicate.Account(sql.FieldContainsFold(FieldEmail, v))
 }
 
 // PhoneNumberEQ applies the EQ predicate on the "phone_number" field.

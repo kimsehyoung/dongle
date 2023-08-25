@@ -18,7 +18,12 @@ type Account struct {
 func (Account) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int32("role_id"),
-		field.String("email").
+		field.String("login_id").
+			Unique().
+			SchemaType(map[string]string{
+				dialect.Postgres: "varchar(32)",
+			}),
+		field.String("hashed_password").
 			Unique().
 			SchemaType(map[string]string{
 				dialect.Postgres: "varchar(32)",
@@ -27,10 +32,10 @@ func (Account) Fields() []ent.Field {
 			SchemaType(map[string]string{
 				dialect.Postgres: "varchar(32)",
 			}),
-		field.String("hashed_password").
+		field.String("email").
 			Unique().
 			SchemaType(map[string]string{
-				dialect.Postgres: "varchar(32)",
+				dialect.Postgres: "varchar(320)",
 			}),
 		field.String("phone_number").
 			Unique().

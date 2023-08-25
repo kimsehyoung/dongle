@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package dongle.auth;
-option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/musicpb";
-
-
-service Music {
-
-}
