@@ -12,8 +12,8 @@ const (
 	Label = "role"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldMemberType holds the string denoting the member_type field in the database.
-	FieldMemberType = "member_type"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// EdgeAccounts holds the string denoting the accounts edge name in mutations.
 	EdgeAccounts = "accounts"
 	// Table holds the table name of the role in the database.
@@ -30,7 +30,7 @@ const (
 // Columns holds all SQL columns for role fields.
 var Columns = []string{
 	FieldID,
-	FieldMemberType,
+	FieldType,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -43,6 +43,11 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// TypeValidator is a validator for the "type" field. It is called by the builders before save.
+	TypeValidator func(string) error
+)
+
 // OrderOption defines the ordering options for the Role queries.
 type OrderOption func(*sql.Selector)
 
@@ -51,9 +56,9 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByMemberType orders the results by the member_type field.
-func ByMemberType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldMemberType, opts...).ToFunc()
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByAccountsCount orders the results by accounts count.

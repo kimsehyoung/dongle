@@ -9,118 +9,118 @@ import (
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int32) predicate.Role {
+func ID(id int) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int32) predicate.Role {
+func IDEQ(id int) predicate.Role {
 	return predicate.Role(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int32) predicate.Role {
+func IDNEQ(id int) predicate.Role {
 	return predicate.Role(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int32) predicate.Role {
+func IDIn(ids ...int) predicate.Role {
 	return predicate.Role(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int32) predicate.Role {
+func IDNotIn(ids ...int) predicate.Role {
 	return predicate.Role(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int32) predicate.Role {
+func IDGT(id int) predicate.Role {
 	return predicate.Role(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int32) predicate.Role {
+func IDGTE(id int) predicate.Role {
 	return predicate.Role(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int32) predicate.Role {
+func IDLT(id int) predicate.Role {
 	return predicate.Role(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int32) predicate.Role {
+func IDLTE(id int) predicate.Role {
 	return predicate.Role(sql.FieldLTE(FieldID, id))
 }
 
-// MemberType applies equality check predicate on the "member_type" field. It's identical to MemberTypeEQ.
-func MemberType(v string) predicate.Role {
-	return predicate.Role(sql.FieldEQ(FieldMemberType, v))
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v string) predicate.Role {
+	return predicate.Role(sql.FieldEQ(FieldType, v))
 }
 
-// MemberTypeEQ applies the EQ predicate on the "member_type" field.
-func MemberTypeEQ(v string) predicate.Role {
-	return predicate.Role(sql.FieldEQ(FieldMemberType, v))
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v string) predicate.Role {
+	return predicate.Role(sql.FieldEQ(FieldType, v))
 }
 
-// MemberTypeNEQ applies the NEQ predicate on the "member_type" field.
-func MemberTypeNEQ(v string) predicate.Role {
-	return predicate.Role(sql.FieldNEQ(FieldMemberType, v))
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v string) predicate.Role {
+	return predicate.Role(sql.FieldNEQ(FieldType, v))
 }
 
-// MemberTypeIn applies the In predicate on the "member_type" field.
-func MemberTypeIn(vs ...string) predicate.Role {
-	return predicate.Role(sql.FieldIn(FieldMemberType, vs...))
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...string) predicate.Role {
+	return predicate.Role(sql.FieldIn(FieldType, vs...))
 }
 
-// MemberTypeNotIn applies the NotIn predicate on the "member_type" field.
-func MemberTypeNotIn(vs ...string) predicate.Role {
-	return predicate.Role(sql.FieldNotIn(FieldMemberType, vs...))
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...string) predicate.Role {
+	return predicate.Role(sql.FieldNotIn(FieldType, vs...))
 }
 
-// MemberTypeGT applies the GT predicate on the "member_type" field.
-func MemberTypeGT(v string) predicate.Role {
-	return predicate.Role(sql.FieldGT(FieldMemberType, v))
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v string) predicate.Role {
+	return predicate.Role(sql.FieldGT(FieldType, v))
 }
 
-// MemberTypeGTE applies the GTE predicate on the "member_type" field.
-func MemberTypeGTE(v string) predicate.Role {
-	return predicate.Role(sql.FieldGTE(FieldMemberType, v))
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v string) predicate.Role {
+	return predicate.Role(sql.FieldGTE(FieldType, v))
 }
 
-// MemberTypeLT applies the LT predicate on the "member_type" field.
-func MemberTypeLT(v string) predicate.Role {
-	return predicate.Role(sql.FieldLT(FieldMemberType, v))
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v string) predicate.Role {
+	return predicate.Role(sql.FieldLT(FieldType, v))
 }
 
-// MemberTypeLTE applies the LTE predicate on the "member_type" field.
-func MemberTypeLTE(v string) predicate.Role {
-	return predicate.Role(sql.FieldLTE(FieldMemberType, v))
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v string) predicate.Role {
+	return predicate.Role(sql.FieldLTE(FieldType, v))
 }
 
-// MemberTypeContains applies the Contains predicate on the "member_type" field.
-func MemberTypeContains(v string) predicate.Role {
-	return predicate.Role(sql.FieldContains(FieldMemberType, v))
+// TypeContains applies the Contains predicate on the "type" field.
+func TypeContains(v string) predicate.Role {
+	return predicate.Role(sql.FieldContains(FieldType, v))
 }
 
-// MemberTypeHasPrefix applies the HasPrefix predicate on the "member_type" field.
-func MemberTypeHasPrefix(v string) predicate.Role {
-	return predicate.Role(sql.FieldHasPrefix(FieldMemberType, v))
+// TypeHasPrefix applies the HasPrefix predicate on the "type" field.
+func TypeHasPrefix(v string) predicate.Role {
+	return predicate.Role(sql.FieldHasPrefix(FieldType, v))
 }
 
-// MemberTypeHasSuffix applies the HasSuffix predicate on the "member_type" field.
-func MemberTypeHasSuffix(v string) predicate.Role {
-	return predicate.Role(sql.FieldHasSuffix(FieldMemberType, v))
+// TypeHasSuffix applies the HasSuffix predicate on the "type" field.
+func TypeHasSuffix(v string) predicate.Role {
+	return predicate.Role(sql.FieldHasSuffix(FieldType, v))
 }
 
-// MemberTypeEqualFold applies the EqualFold predicate on the "member_type" field.
-func MemberTypeEqualFold(v string) predicate.Role {
-	return predicate.Role(sql.FieldEqualFold(FieldMemberType, v))
+// TypeEqualFold applies the EqualFold predicate on the "type" field.
+func TypeEqualFold(v string) predicate.Role {
+	return predicate.Role(sql.FieldEqualFold(FieldType, v))
 }
 
-// MemberTypeContainsFold applies the ContainsFold predicate on the "member_type" field.
-func MemberTypeContainsFold(v string) predicate.Role {
-	return predicate.Role(sql.FieldContainsFold(FieldMemberType, v))
+// TypeContainsFold applies the ContainsFold predicate on the "type" field.
+func TypeContainsFold(v string) predicate.Role {
+	return predicate.Role(sql.FieldContainsFold(FieldType, v))
 }
 
 // HasAccounts applies the HasEdge predicate on the "accounts" edge.

@@ -297,7 +297,7 @@ func (aq *AccountQuery) WithRole(opts ...func(*RoleQuery)) *AccountQuery {
 // Example:
 //
 //	var v []struct {
-//		RoleID int32 `json:"role_id,omitempty"`
+//		RoleID int `json:"role_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -320,7 +320,7 @@ func (aq *AccountQuery) GroupBy(field string, fields ...string) *AccountGroupBy 
 // Example:
 //
 //	var v []struct {
-//		RoleID int32 `json:"role_id,omitempty"`
+//		RoleID int `json:"role_id,omitempty"`
 //	}
 //
 //	client.Account.Query().
@@ -401,8 +401,8 @@ func (aq *AccountQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Acco
 }
 
 func (aq *AccountQuery) loadRole(ctx context.Context, query *RoleQuery, nodes []*Account, init func(*Account), assign func(*Account, *Role)) error {
-	ids := make([]int32, 0, len(nodes))
-	nodeids := make(map[int32][]*Account)
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Account)
 	for i := range nodes {
 		fk := nodes[i].RoleID
 		if _, ok := nodeids[fk]; !ok {

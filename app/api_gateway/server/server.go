@@ -5,12 +5,11 @@ import (
 	"net"
 	"net/http"
 
-	auth_interceptor "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/selector"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/auth"
+	"github.com/kimsehyoung/dongle/app/api_gateway/server/interceptor"
 	"github.com/kimsehyoung/dongle/app/api_gateway/server/speech"
 	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
@@ -30,16 +29,16 @@ type ServiceInfo struct {
 	TestServiceAddr   string
 	AuthServiceAddr   string
 	SpeechServiceAddr string
+	// Redis for refresh token
+	TokenDbAddr string
 }
 
 func StartGrpcServer(serviceInfo ServiceInfo) {
 
 	// Configure gRPC server
 	opts := []grpc.ServerOption{
-		// https://github.dev/grpc-ecosystem/go-grpc-middleware/blob/main/interceptors/auth/auth.go
-		// https://pkg.go.dev/github.com/grpc-ecosystem/go-grpc-middleware/v2#section-readme
 		grpc.ChainUnaryInterceptor(
-			selector.UnaryServerInterceptor(auth_interceptor.UnaryServerInterceptor(auth.AuthInterceptor), selector.MatchFunc(auth.AuthSkip)),
+			interceptor.AuthUnaryInterceptor(),
 		),
 	}
 	if serviceInfo.TlsEnabled {
@@ -52,7 +51,10 @@ func StartGrpcServer(serviceInfo ServiceInfo) {
 	grpcServer := grpc.NewServer(opts...)
 
 	// Register servicesb
-	authpb.RegisterAuthServer(grpcServer, &auth.AuthService{AuthClient: auth.GetAuthClient(serviceInfo.AuthServiceAddr)})
+	authpb.RegisterAuthServer(grpcServer, &auth.AuthService{
+		AuthClient:    auth.GetAuthClient(serviceInfo.AuthServiceAddr),
+		TokenDbClient: auth.GetTokenDbClient(serviceInfo.TokenDbAddr),
+	})
 	speechpb.RegisterSpeechServer(grpcServer, &speech.SpeechService{SpeechClient: speech.GetSpeechClient(serviceInfo.SpeechServiceAddr)})
 
 	// Start gRPC Server

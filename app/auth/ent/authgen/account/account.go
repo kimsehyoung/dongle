@@ -16,14 +16,12 @@ const (
 	FieldID = "id"
 	// FieldRoleID holds the string denoting the role_id field in the database.
 	FieldRoleID = "role_id"
-	// FieldLoginID holds the string denoting the login_id field in the database.
-	FieldLoginID = "login_id"
+	// FieldEmail holds the string denoting the email field in the database.
+	FieldEmail = "email"
 	// FieldHashedPassword holds the string denoting the hashed_password field in the database.
 	FieldHashedPassword = "hashed_password"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
-	// FieldEmail holds the string denoting the email field in the database.
-	FieldEmail = "email"
 	// FieldPhoneNumber holds the string denoting the phone_number field in the database.
 	FieldPhoneNumber = "phone_number"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -45,10 +43,9 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldRoleID,
-	FieldLoginID,
+	FieldEmail,
 	FieldHashedPassword,
 	FieldName,
-	FieldEmail,
 	FieldPhoneNumber,
 	FieldCreatedAt,
 }
@@ -81,9 +78,9 @@ func ByRoleID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldRoleID, opts...).ToFunc()
 }
 
-// ByLoginID orders the results by the login_id field.
-func ByLoginID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLoginID, opts...).ToFunc()
+// ByEmail orders the results by the email field.
+func ByEmail(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
 // ByHashedPassword orders the results by the hashed_password field.
@@ -94,11 +91,6 @@ func ByHashedPassword(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
-}
-
-// ByEmail orders the results by the email field.
-func ByEmail(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEmail, opts...).ToFunc()
 }
 
 // ByPhoneNumber orders the results by the phone_number field.

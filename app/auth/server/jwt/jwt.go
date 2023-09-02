@@ -1,13 +1,9 @@
-package auth
+package jwt
 
 import (
-	"context"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors"
-	auth_interceptor "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
-	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -15,65 +11,39 @@ import (
 type TokenType string
 
 const (
-	Token_ACCESS  TokenType = "access"
-	Token_REFRESH TokenType = "refresh"
+	ACCESS_TOKEN  TokenType = "access"
+	REFRESH_TOKEN TokenType = "refresh"
 )
 
 const (
 	// TODO: This will be replaced to 'Valut'.
 	secretKey            = "temporary_secret_key"
 	accessTokenDuration  = 30 * time.Minute
-	refreshTokenDuration = 30 * 24 * time.Hour
-	refreshTokenReissue  = 10 * 24 * time.Hour
+	RefreshTokenDuration = 1 * 24 * time.Hour
 )
 
 type MyCustomClaims struct {
 	jwt.RegisteredClaims
-	Role authpb.Role `json:"role"`
+	RoleId int `json:"roleId"`
 }
 
-var authSkipMethods = map[string]bool{
-	"CreateAccount": true,
-	"CreateToken":   true,
-	"RefreshToken":  true,
-}
-
-func AuthInterceptor(ctx context.Context) (context.Context, error) {
-	token, err := auth_interceptor.AuthFromMD(ctx, "bearer")
-	if err != nil {
-		return nil, err
-	}
-	_, err = VerifyJwt(token)
-	if err != nil {
-		return nil, err
-	}
-	return ctx, nil
-}
-
-func AuthSkip(_ context.Context, c interceptors.CallMeta) bool {
-	return !authSkipMethods[c.Method]
-	// c.FullMethod() => '/dongle.speech.Speech/Recognize'
-	// c.Service => 'dongle.speech.Speech'
-	// c.Method => 'Recognize'
-}
-
-func CreateJwt(loginId string, role authpb.Role, tokenType TokenType) (string, error) {
+func CreateJwt(roleId int, loginId string, tokenType TokenType) (string, error) {
 	duration := accessTokenDuration
-	if tokenType == Token_REFRESH {
-		duration = refreshTokenDuration
+	if tokenType == REFRESH_TOKEN {
+		duration = RefreshTokenDuration
 	}
 
 	claims := &MyCustomClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "sehyoung",
-			Subject:   "dongle",
-			Audience:  []string{loginId},
+			Subject:   loginId,
+			Audience:  []string{"dognle"},
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 			// NotBefore:
 			IssuedAt: jwt.NewNumericDate(time.Now()),
 			// ID:
 		},
-		Role: role,
+		RoleId: roleId,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

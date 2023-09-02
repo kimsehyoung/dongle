@@ -106,8 +106,8 @@ func (rq *RoleQuery) FirstX(ctx context.Context) *Role {
 
 // FirstID returns the first Role ID from the query.
 // Returns a *NotFoundError when no Role ID was found.
-func (rq *RoleQuery) FirstID(ctx context.Context) (id int32, err error) {
-	var ids []int32
+func (rq *RoleQuery) FirstID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = rq.Limit(1).IDs(setContextOp(ctx, rq.ctx, "FirstID")); err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (rq *RoleQuery) FirstID(ctx context.Context) (id int32, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (rq *RoleQuery) FirstIDX(ctx context.Context) int32 {
+func (rq *RoleQuery) FirstIDX(ctx context.Context) int {
 	id, err := rq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -157,8 +157,8 @@ func (rq *RoleQuery) OnlyX(ctx context.Context) *Role {
 // OnlyID is like Only, but returns the only Role ID in the query.
 // Returns a *NotSingularError when more than one Role ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (rq *RoleQuery) OnlyID(ctx context.Context) (id int32, err error) {
-	var ids []int32
+func (rq *RoleQuery) OnlyID(ctx context.Context) (id int, err error) {
+	var ids []int
 	if ids, err = rq.Limit(2).IDs(setContextOp(ctx, rq.ctx, "OnlyID")); err != nil {
 		return
 	}
@@ -174,7 +174,7 @@ func (rq *RoleQuery) OnlyID(ctx context.Context) (id int32, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (rq *RoleQuery) OnlyIDX(ctx context.Context) int32 {
+func (rq *RoleQuery) OnlyIDX(ctx context.Context) int {
 	id, err := rq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -202,7 +202,7 @@ func (rq *RoleQuery) AllX(ctx context.Context) []*Role {
 }
 
 // IDs executes the query and returns a list of Role IDs.
-func (rq *RoleQuery) IDs(ctx context.Context) (ids []int32, err error) {
+func (rq *RoleQuery) IDs(ctx context.Context) (ids []int, err error) {
 	if rq.ctx.Unique == nil && rq.path != nil {
 		rq.Unique(true)
 	}
@@ -214,7 +214,7 @@ func (rq *RoleQuery) IDs(ctx context.Context) (ids []int32, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (rq *RoleQuery) IDsX(ctx context.Context) []int32 {
+func (rq *RoleQuery) IDsX(ctx context.Context) []int {
 	ids, err := rq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -298,12 +298,12 @@ func (rq *RoleQuery) WithAccounts(opts ...func(*AccountQuery)) *RoleQuery {
 // Example:
 //
 //	var v []struct {
-//		MemberType string `json:"member_type,omitempty"`
+//		Type string `json:"type,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		GroupBy(role.FieldMemberType).
+//		GroupBy(role.FieldType).
 //		Aggregate(authgen.Count()).
 //		Scan(ctx, &v)
 func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
@@ -321,11 +321,11 @@ func (rq *RoleQuery) GroupBy(field string, fields ...string) *RoleGroupBy {
 // Example:
 //
 //	var v []struct {
-//		MemberType string `json:"member_type,omitempty"`
+//		Type string `json:"type,omitempty"`
 //	}
 //
 //	client.Role.Query().
-//		Select(role.FieldMemberType).
+//		Select(role.FieldType).
 //		Scan(ctx, &v)
 func (rq *RoleQuery) Select(fields ...string) *RoleSelect {
 	rq.ctx.Fields = append(rq.ctx.Fields, fields...)
@@ -404,7 +404,7 @@ func (rq *RoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Role, e
 
 func (rq *RoleQuery) loadAccounts(ctx context.Context, query *AccountQuery, nodes []*Role, init func(*Role), assign func(*Role, *Account)) error {
 	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[int32]*Role)
+	nodeids := make(map[int]*Role)
 	for i := range nodes {
 		fks = append(fks, nodes[i].ID)
 		nodeids[nodes[i].ID] = nodes[i]
@@ -443,7 +443,7 @@ func (rq *RoleQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (rq *RoleQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32))
+	_spec := sqlgraph.NewQuerySpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt))
 	_spec.From = rq.sql
 	if unique := rq.ctx.Unique; unique != nil {
 		_spec.Unique = *unique

@@ -6,5 +6,10 @@
 tools/devcontainer/work
 tools/devcontainer/.env
 
+# Binaries
+app/api_gateway/api_gateway
+app/auth/auth
+app/speech/speech
+
 # Secret
 *google-credentials*

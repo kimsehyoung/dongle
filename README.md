@@ -1,11 +1,14 @@
 # Dongle
-이번 cycle은 다음 cycle을 위한 환경 구축, 아키텍처, 기술 적용으로 준비 단계<br>
-- 인증
-- Speech 서비스
-- 동영상 자막 서비스<br>
 
+This cycle
+- Architecture design
+- Development environment
+- Auth
+- Speech service
+- Video subtitle service
+- Cloud Infra
 
-**목차**
+**Table of contents**
 - [1. Work Cycle](#1-work-cycle)
 - [2. Directory Layout](#2-directory-layout)
 - [3. Architecture](#3-architecture)
@@ -49,14 +52,13 @@ flowchart TD
         speech_service["Speech service"]
         chatbot_service["Chatbot service"]
         music_service["Video service"]
-        object_storage["Object Storage"]
     end
 
     subgraph Enhancement
-        graceful_shutdown["Graceful Shutdown"]
-        rate_limit["Rate Limit"]
-        secret_manager["Secret Manager"]
         containerization["Containerization"]
+        cloud_infra["Cloud Infra"]
+        secret_manager["Secret Manager"]
+        ci_cd["CI/CD"]
     end
 
     subgraph Plan
@@ -146,7 +148,7 @@ style chatbot_service fill:#83502E
 - Token-based
     - Redis : refresh token
 - RBAC (Role-based access control)
-    -   admin / manager / user
+    -   root / admin / user
 
 #### `Chatbot` (Python)
 - Matching Intent
@@ -166,7 +168,7 @@ style chatbot_service fill:#83502E
 ### 4.2 Operation and Deployment
 
 #### `CI/CD`
-- Github Action
+- Github Action, ArgoCD
 - Buildah or Kaniko
 #### `Deployment`
 - Compose
@@ -192,18 +194,18 @@ style chatbot_service fill:#83502E
 
 ### 5.2 OSS List
 
-| OSS                | License               | Desc                                 | Link                                            |
-| :----------------- | :-------------------- | :----------------------------------- | :---------------------------------------------- |
-| protobuf           | BSD-3-Clause          | Google's data interchange format     | https://github.com/protocolbuffers/protobuf-go  |
-| grpc               | Apache-2.0            | HTTP/2 based RPC                     | https://github.com/grpc/grpc-go                 |
-| grpc-gateway       | BSD-3-Clause          | RESTful API into gRPC                | https://github.com/grpc-ecosystem/grpc-gateway  |
+| OSS                | License               | Desc                                 | Link                                                    |
+| :----------------- | :-------------------- | :----------------------------------- | :------------------------------------------------------ |
+| protobuf           | BSD-3-Clause          | Google's data interchange format     | https://github.com/protocolbuffers/protobuf-go          |
+| grpc               | Apache-2.0            | HTTP/2 based RPC                     | https://github.com/grpc/grpc-go                         |
+| grpc-gateway       | BSD-3-Clause          | RESTful API into gRPC                | https://github.com/grpc-ecosystem/grpc-gateway          |
 | go-grpc-middleware | Apache-2.0            | Go gRPC interceptor auth, logging... | https://github.com/grpc-ecosystem/go-grpc-middleware/v2 |
-| validator          | MIT                   | Go Struct and Field validation       | https://github.com/go-playground/validator      |
-| postgres           | similar to BSD or MIT | RDBMS                                | https://github.com/postgres/postgres            |
-| ent                | Apache-2.0            | An entity framework for Go           | https://github.com/ent/ent                      |
-| pgx                | MIT                   | PostgreSQL driver for Go             | https://github.com/jackc/pgx                    |
-| redis              | BSD-3-Clause          | key-value in-memory database         | https://github.com/redis/redis                  |
-| jwt                | MIT                   | go implementation of JSON Web Tokens | https://github.com/golang-jwt/jwt               |
+| validator          | MIT                   | Go Struct and Field validation       | https://github.com/go-playground/validator              |
+| postgres           | similar to BSD or MIT | RDBMS                                | https://github.com/postgres/postgres                    |
+| ent                | Apache-2.0            | An entity framework for Go           | https://github.com/ent/ent                              |
+| pgx                | MIT                   | PostgreSQL driver for Go             | https://github.com/jackc/pgx                            |
+| go-redis           | BSD-2-Clause          | Redis Go client                      | https://github.com/redis/go-redis                       |
+| jwt                | MIT                   | go implementation of JSON Web Tokens | https://github.com/golang-jwt/jwt                       |
 
 
 

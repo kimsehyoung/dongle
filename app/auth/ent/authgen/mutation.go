@@ -35,14 +35,13 @@ type AccountMutation struct {
 	op              Op
 	typ             string
 	id              *int
-	login_id        *string
+	email           *string
 	hashed_password *string
 	name            *string
-	email           *string
 	phone_number    *string
 	created_at      *time.Time
 	clearedFields   map[string]struct{}
-	role            *int32
+	role            *int
 	clearedrole     bool
 	done            bool
 	oldValue        func(context.Context) (*Account, error)
@@ -148,12 +147,12 @@ func (m *AccountMutation) IDs(ctx context.Context) ([]int, error) {
 }
 
 // SetRoleID sets the "role_id" field.
-func (m *AccountMutation) SetRoleID(i int32) {
+func (m *AccountMutation) SetRoleID(i int) {
 	m.role = &i
 }
 
 // RoleID returns the value of the "role_id" field in the mutation.
-func (m *AccountMutation) RoleID() (r int32, exists bool) {
+func (m *AccountMutation) RoleID() (r int, exists bool) {
 	v := m.role
 	if v == nil {
 		return
@@ -164,7 +163,7 @@ func (m *AccountMutation) RoleID() (r int32, exists bool) {
 // OldRoleID returns the old "role_id" field's value of the Account entity.
 // If the Account object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldRoleID(ctx context.Context) (v int32, err error) {
+func (m *AccountMutation) OldRoleID(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRoleID is only allowed on UpdateOne operations")
 	}
@@ -183,40 +182,40 @@ func (m *AccountMutation) ResetRoleID() {
 	m.role = nil
 }
 
-// SetLoginID sets the "login_id" field.
-func (m *AccountMutation) SetLoginID(s string) {
-	m.login_id = &s
+// SetEmail sets the "email" field.
+func (m *AccountMutation) SetEmail(s string) {
+	m.email = &s
 }
 
-// LoginID returns the value of the "login_id" field in the mutation.
-func (m *AccountMutation) LoginID() (r string, exists bool) {
-	v := m.login_id
+// Email returns the value of the "email" field in the mutation.
+func (m *AccountMutation) Email() (r string, exists bool) {
+	v := m.email
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldLoginID returns the old "login_id" field's value of the Account entity.
+// OldEmail returns the old "email" field's value of the Account entity.
 // If the Account object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldLoginID(ctx context.Context) (v string, err error) {
+func (m *AccountMutation) OldEmail(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldLoginID is only allowed on UpdateOne operations")
+		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldLoginID requires an ID field in the mutation")
+		return v, errors.New("OldEmail requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldLoginID: %w", err)
+		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
 	}
-	return oldValue.LoginID, nil
+	return oldValue.Email, nil
 }
 
-// ResetLoginID resets all changes to the "login_id" field.
-func (m *AccountMutation) ResetLoginID() {
-	m.login_id = nil
+// ResetEmail resets all changes to the "email" field.
+func (m *AccountMutation) ResetEmail() {
+	m.email = nil
 }
 
 // SetHashedPassword sets the "hashed_password" field.
@@ -289,42 +288,6 @@ func (m *AccountMutation) OldName(ctx context.Context) (v string, err error) {
 // ResetName resets all changes to the "name" field.
 func (m *AccountMutation) ResetName() {
 	m.name = nil
-}
-
-// SetEmail sets the "email" field.
-func (m *AccountMutation) SetEmail(s string) {
-	m.email = &s
-}
-
-// Email returns the value of the "email" field in the mutation.
-func (m *AccountMutation) Email() (r string, exists bool) {
-	v := m.email
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEmail returns the old "email" field's value of the Account entity.
-// If the Account object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AccountMutation) OldEmail(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEmail is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEmail requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEmail: %w", err)
-	}
-	return oldValue.Email, nil
-}
-
-// ResetEmail resets all changes to the "email" field.
-func (m *AccountMutation) ResetEmail() {
-	m.email = nil
 }
 
 // SetPhoneNumber sets the "phone_number" field.
@@ -412,7 +375,7 @@ func (m *AccountMutation) RoleCleared() bool {
 // RoleIDs returns the "role" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // RoleID instead. It exists only for internal usage by the builders.
-func (m *AccountMutation) RoleIDs() (ids []int32) {
+func (m *AccountMutation) RoleIDs() (ids []int) {
 	if id := m.role; id != nil {
 		ids = append(ids, *id)
 	}
@@ -459,21 +422,18 @@ func (m *AccountMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *AccountMutation) Fields() []string {
-	fields := make([]string, 0, 7)
+	fields := make([]string, 0, 6)
 	if m.role != nil {
 		fields = append(fields, account.FieldRoleID)
 	}
-	if m.login_id != nil {
-		fields = append(fields, account.FieldLoginID)
+	if m.email != nil {
+		fields = append(fields, account.FieldEmail)
 	}
 	if m.hashed_password != nil {
 		fields = append(fields, account.FieldHashedPassword)
 	}
 	if m.name != nil {
 		fields = append(fields, account.FieldName)
-	}
-	if m.email != nil {
-		fields = append(fields, account.FieldEmail)
 	}
 	if m.phone_number != nil {
 		fields = append(fields, account.FieldPhoneNumber)
@@ -491,14 +451,12 @@ func (m *AccountMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case account.FieldRoleID:
 		return m.RoleID()
-	case account.FieldLoginID:
-		return m.LoginID()
+	case account.FieldEmail:
+		return m.Email()
 	case account.FieldHashedPassword:
 		return m.HashedPassword()
 	case account.FieldName:
 		return m.Name()
-	case account.FieldEmail:
-		return m.Email()
 	case account.FieldPhoneNumber:
 		return m.PhoneNumber()
 	case account.FieldCreatedAt:
@@ -514,14 +472,12 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 	switch name {
 	case account.FieldRoleID:
 		return m.OldRoleID(ctx)
-	case account.FieldLoginID:
-		return m.OldLoginID(ctx)
+	case account.FieldEmail:
+		return m.OldEmail(ctx)
 	case account.FieldHashedPassword:
 		return m.OldHashedPassword(ctx)
 	case account.FieldName:
 		return m.OldName(ctx)
-	case account.FieldEmail:
-		return m.OldEmail(ctx)
 	case account.FieldPhoneNumber:
 		return m.OldPhoneNumber(ctx)
 	case account.FieldCreatedAt:
@@ -536,18 +492,18 @@ func (m *AccountMutation) OldField(ctx context.Context, name string) (ent.Value,
 func (m *AccountMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case account.FieldRoleID:
-		v, ok := value.(int32)
+		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetRoleID(v)
 		return nil
-	case account.FieldLoginID:
+	case account.FieldEmail:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetLoginID(v)
+		m.SetEmail(v)
 		return nil
 	case account.FieldHashedPassword:
 		v, ok := value.(string)
@@ -562,13 +518,6 @@ func (m *AccountMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetName(v)
-		return nil
-	case account.FieldEmail:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEmail(v)
 		return nil
 	case account.FieldPhoneNumber:
 		v, ok := value.(string)
@@ -639,17 +588,14 @@ func (m *AccountMutation) ResetField(name string) error {
 	case account.FieldRoleID:
 		m.ResetRoleID()
 		return nil
-	case account.FieldLoginID:
-		m.ResetLoginID()
+	case account.FieldEmail:
+		m.ResetEmail()
 		return nil
 	case account.FieldHashedPassword:
 		m.ResetHashedPassword()
 		return nil
 	case account.FieldName:
 		m.ResetName()
-		return nil
-	case account.FieldEmail:
-		m.ResetEmail()
 		return nil
 	case account.FieldPhoneNumber:
 		m.ResetPhoneNumber()
@@ -740,8 +686,8 @@ type RoleMutation struct {
 	config
 	op              Op
 	typ             string
-	id              *int32
-	member_type     *string
+	id              *int
+	_type           *string
 	clearedFields   map[string]struct{}
 	accounts        map[int]struct{}
 	removedaccounts map[int]struct{}
@@ -771,7 +717,7 @@ func newRoleMutation(c config, op Op, opts ...roleOption) *RoleMutation {
 }
 
 // withRoleID sets the ID field of the mutation.
-func withRoleID(id int32) roleOption {
+func withRoleID(id int) roleOption {
 	return func(m *RoleMutation) {
 		var (
 			err   error
@@ -821,15 +767,9 @@ func (m RoleMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
-// SetID sets the value of the id field. Note that this
-// operation is only accepted on creation of Role entities.
-func (m *RoleMutation) SetID(id int32) {
-	m.id = &id
-}
-
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *RoleMutation) ID() (id int32, exists bool) {
+func (m *RoleMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -840,12 +780,12 @@ func (m *RoleMutation) ID() (id int32, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *RoleMutation) IDs(ctx context.Context) ([]int32, error) {
+func (m *RoleMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int32{id}, nil
+			return []int{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -855,40 +795,40 @@ func (m *RoleMutation) IDs(ctx context.Context) ([]int32, error) {
 	}
 }
 
-// SetMemberType sets the "member_type" field.
-func (m *RoleMutation) SetMemberType(s string) {
-	m.member_type = &s
+// SetType sets the "type" field.
+func (m *RoleMutation) SetType(s string) {
+	m._type = &s
 }
 
-// MemberType returns the value of the "member_type" field in the mutation.
-func (m *RoleMutation) MemberType() (r string, exists bool) {
-	v := m.member_type
+// GetType returns the value of the "type" field in the mutation.
+func (m *RoleMutation) GetType() (r string, exists bool) {
+	v := m._type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldMemberType returns the old "member_type" field's value of the Role entity.
+// OldType returns the old "type" field's value of the Role entity.
 // If the Role object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *RoleMutation) OldMemberType(ctx context.Context) (v string, err error) {
+func (m *RoleMutation) OldType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldMemberType is only allowed on UpdateOne operations")
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldMemberType requires an ID field in the mutation")
+		return v, errors.New("OldType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldMemberType: %w", err)
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
 	}
-	return oldValue.MemberType, nil
+	return oldValue.Type, nil
 }
 
-// ResetMemberType resets all changes to the "member_type" field.
-func (m *RoleMutation) ResetMemberType() {
-	m.member_type = nil
+// ResetType resets all changes to the "type" field.
+func (m *RoleMutation) ResetType() {
+	m._type = nil
 }
 
 // AddAccountIDs adds the "accounts" edge to the Account entity by ids.
@@ -980,8 +920,8 @@ func (m *RoleMutation) Type() string {
 // AddedFields().
 func (m *RoleMutation) Fields() []string {
 	fields := make([]string, 0, 1)
-	if m.member_type != nil {
-		fields = append(fields, role.FieldMemberType)
+	if m._type != nil {
+		fields = append(fields, role.FieldType)
 	}
 	return fields
 }
@@ -991,8 +931,8 @@ func (m *RoleMutation) Fields() []string {
 // schema.
 func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case role.FieldMemberType:
-		return m.MemberType()
+	case role.FieldType:
+		return m.GetType()
 	}
 	return nil, false
 }
@@ -1002,8 +942,8 @@ func (m *RoleMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case role.FieldMemberType:
-		return m.OldMemberType(ctx)
+	case role.FieldType:
+		return m.OldType(ctx)
 	}
 	return nil, fmt.Errorf("unknown Role field %s", name)
 }
@@ -1013,12 +953,12 @@ func (m *RoleMutation) OldField(ctx context.Context, name string) (ent.Value, er
 // type.
 func (m *RoleMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case role.FieldMemberType:
+	case role.FieldType:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetMemberType(v)
+		m.SetType(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)
@@ -1069,8 +1009,8 @@ func (m *RoleMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *RoleMutation) ResetField(name string) error {
 	switch name {
-	case role.FieldMemberType:
-		m.ResetMemberType()
+	case role.FieldType:
+		m.ResetType()
 		return nil
 	}
 	return fmt.Errorf("unknown Role field %s", name)

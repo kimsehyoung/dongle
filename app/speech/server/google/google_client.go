@@ -22,7 +22,7 @@ func GetGoogleClient(ctx context.Context) *GoogleClient {
 	once.Do(func() {
 		client, err := texttospeech.NewClient(ctx)
 		if err != nil {
-			logger.Errorf("Faield to intialize google client: %v", err)
+			logger.Errorf("Failed to intialize google client: %v", err)
 			return
 		}
 		googleClient = &GoogleClient{client}

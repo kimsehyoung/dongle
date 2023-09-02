@@ -7,20 +7,12 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 // #######    Account    #######
-enum Role {
-    UNSPECIFIED = 0;
-    ADMIN = 1;
-    MANAGER = 2;
-    USER = 3;
-}
-
 message AccountRequest {
-    string login_id = 1;
-    string password = 2;
-    string name = 3;
-    string email = 4;
+    string role = 1;
+    string email = 2;
+    string password = 3;
+    string name = 4;
     string phone_number = 5;
-    Role role = 6;
 }
 
 message PasswordRequest {
@@ -30,14 +22,14 @@ message PasswordRequest {
 
 // #######    Login    #######
 message CreateTokenRequest {
-    string login_id = 1;
+    string email = 1;
     string password = 2;
 }
 message TokenRequest {
     string refresh_token = 1;
 }
 message TokenResposne {
-	string token = 1;
+	string access_token = 1;
     string refresh_token = 2;
 }
 

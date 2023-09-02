@@ -22,14 +22,14 @@ type AccountCreate struct {
 }
 
 // SetRoleID sets the "role_id" field.
-func (ac *AccountCreate) SetRoleID(i int32) *AccountCreate {
+func (ac *AccountCreate) SetRoleID(i int) *AccountCreate {
 	ac.mutation.SetRoleID(i)
 	return ac
 }
 
-// SetLoginID sets the "login_id" field.
-func (ac *AccountCreate) SetLoginID(s string) *AccountCreate {
-	ac.mutation.SetLoginID(s)
+// SetEmail sets the "email" field.
+func (ac *AccountCreate) SetEmail(s string) *AccountCreate {
+	ac.mutation.SetEmail(s)
 	return ac
 }
 
@@ -42,12 +42,6 @@ func (ac *AccountCreate) SetHashedPassword(s string) *AccountCreate {
 // SetName sets the "name" field.
 func (ac *AccountCreate) SetName(s string) *AccountCreate {
 	ac.mutation.SetName(s)
-	return ac
-}
-
-// SetEmail sets the "email" field.
-func (ac *AccountCreate) SetEmail(s string) *AccountCreate {
-	ac.mutation.SetEmail(s)
 	return ac
 }
 
@@ -122,17 +116,14 @@ func (ac *AccountCreate) check() error {
 	if _, ok := ac.mutation.RoleID(); !ok {
 		return &ValidationError{Name: "role_id", err: errors.New(`authgen: missing required field "Account.role_id"`)}
 	}
-	if _, ok := ac.mutation.LoginID(); !ok {
-		return &ValidationError{Name: "login_id", err: errors.New(`authgen: missing required field "Account.login_id"`)}
+	if _, ok := ac.mutation.Email(); !ok {
+		return &ValidationError{Name: "email", err: errors.New(`authgen: missing required field "Account.email"`)}
 	}
 	if _, ok := ac.mutation.HashedPassword(); !ok {
 		return &ValidationError{Name: "hashed_password", err: errors.New(`authgen: missing required field "Account.hashed_password"`)}
 	}
 	if _, ok := ac.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`authgen: missing required field "Account.name"`)}
-	}
-	if _, ok := ac.mutation.Email(); !ok {
-		return &ValidationError{Name: "email", err: errors.New(`authgen: missing required field "Account.email"`)}
 	}
 	if _, ok := ac.mutation.PhoneNumber(); !ok {
 		return &ValidationError{Name: "phone_number", err: errors.New(`authgen: missing required field "Account.phone_number"`)}
@@ -169,9 +160,9 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 		_node = &Account{config: ac.config}
 		_spec = sqlgraph.NewCreateSpec(account.Table, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt))
 	)
-	if value, ok := ac.mutation.LoginID(); ok {
-		_spec.SetField(account.FieldLoginID, field.TypeString, value)
-		_node.LoginID = value
+	if value, ok := ac.mutation.Email(); ok {
+		_spec.SetField(account.FieldEmail, field.TypeString, value)
+		_node.Email = value
 	}
 	if value, ok := ac.mutation.HashedPassword(); ok {
 		_spec.SetField(account.FieldHashedPassword, field.TypeString, value)
@@ -180,10 +171,6 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 	if value, ok := ac.mutation.Name(); ok {
 		_spec.SetField(account.FieldName, field.TypeString, value)
 		_node.Name = value
-	}
-	if value, ok := ac.mutation.Email(); ok {
-		_spec.SetField(account.FieldEmail, field.TypeString, value)
-		_node.Email = value
 	}
 	if value, ok := ac.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
@@ -201,7 +188,7 @@ func (ac *AccountCreate) createSpec() (*Account, *sqlgraph.CreateSpec) {
 			Columns: []string{account.RoleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

@@ -28,9 +28,9 @@ func (ru *RoleUpdate) Where(ps ...predicate.Role) *RoleUpdate {
 	return ru
 }
 
-// SetMemberType sets the "member_type" field.
-func (ru *RoleUpdate) SetMemberType(s string) *RoleUpdate {
-	ru.mutation.SetMemberType(s)
+// SetType sets the "type" field.
+func (ru *RoleUpdate) SetType(s string) *RoleUpdate {
+	ru.mutation.SetType(s)
 	return ru
 }
 
@@ -102,8 +102,21 @@ func (ru *RoleUpdate) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ru *RoleUpdate) check() error {
+	if v, ok := ru.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`authgen: validator failed for field "Role.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32))
+	if err := ru.check(); err != nil {
+		return n, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt))
 	if ps := ru.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -111,8 +124,8 @@ func (ru *RoleUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := ru.mutation.MemberType(); ok {
-		_spec.SetField(role.FieldMemberType, field.TypeString, value)
+	if value, ok := ru.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeString, value)
 	}
 	if ru.mutation.AccountsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -179,9 +192,9 @@ type RoleUpdateOne struct {
 	mutation *RoleMutation
 }
 
-// SetMemberType sets the "member_type" field.
-func (ruo *RoleUpdateOne) SetMemberType(s string) *RoleUpdateOne {
-	ruo.mutation.SetMemberType(s)
+// SetType sets the "type" field.
+func (ruo *RoleUpdateOne) SetType(s string) *RoleUpdateOne {
+	ruo.mutation.SetType(s)
 	return ruo
 }
 
@@ -266,8 +279,21 @@ func (ruo *RoleUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (ruo *RoleUpdateOne) check() error {
+	if v, ok := ruo.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`authgen: validator failed for field "Role.type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) {
-	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32))
+	if err := ruo.check(); err != nil {
+		return _node, err
+	}
+	_spec := sqlgraph.NewUpdateSpec(role.Table, role.Columns, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt))
 	id, ok := ruo.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`authgen: missing "Role.id" for update`)}
@@ -292,8 +318,8 @@ func (ruo *RoleUpdateOne) sqlSave(ctx context.Context) (_node *Role, err error) 
 			}
 		}
 	}
-	if value, ok := ruo.mutation.MemberType(); ok {
-		_spec.SetField(role.FieldMemberType, field.TypeString, value)
+	if value, ok := ruo.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeString, value)
 	}
 	if ruo.mutation.AccountsCleared() {
 		edge := &sqlgraph.EdgeSpec{

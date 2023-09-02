@@ -30,14 +30,14 @@ func (au *AccountUpdate) Where(ps ...predicate.Account) *AccountUpdate {
 }
 
 // SetRoleID sets the "role_id" field.
-func (au *AccountUpdate) SetRoleID(i int32) *AccountUpdate {
+func (au *AccountUpdate) SetRoleID(i int) *AccountUpdate {
 	au.mutation.SetRoleID(i)
 	return au
 }
 
-// SetLoginID sets the "login_id" field.
-func (au *AccountUpdate) SetLoginID(s string) *AccountUpdate {
-	au.mutation.SetLoginID(s)
+// SetEmail sets the "email" field.
+func (au *AccountUpdate) SetEmail(s string) *AccountUpdate {
+	au.mutation.SetEmail(s)
 	return au
 }
 
@@ -50,12 +50,6 @@ func (au *AccountUpdate) SetHashedPassword(s string) *AccountUpdate {
 // SetName sets the "name" field.
 func (au *AccountUpdate) SetName(s string) *AccountUpdate {
 	au.mutation.SetName(s)
-	return au
-}
-
-// SetEmail sets the "email" field.
-func (au *AccountUpdate) SetEmail(s string) *AccountUpdate {
-	au.mutation.SetEmail(s)
 	return au
 }
 
@@ -142,17 +136,14 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
-	if value, ok := au.mutation.LoginID(); ok {
-		_spec.SetField(account.FieldLoginID, field.TypeString, value)
+	if value, ok := au.mutation.Email(); ok {
+		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := au.mutation.HashedPassword(); ok {
 		_spec.SetField(account.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := au.mutation.Name(); ok {
 		_spec.SetField(account.FieldName, field.TypeString, value)
-	}
-	if value, ok := au.mutation.Email(); ok {
-		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := au.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
@@ -168,7 +159,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{account.RoleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -181,7 +172,7 @@ func (au *AccountUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{account.RoleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -210,14 +201,14 @@ type AccountUpdateOne struct {
 }
 
 // SetRoleID sets the "role_id" field.
-func (auo *AccountUpdateOne) SetRoleID(i int32) *AccountUpdateOne {
+func (auo *AccountUpdateOne) SetRoleID(i int) *AccountUpdateOne {
 	auo.mutation.SetRoleID(i)
 	return auo
 }
 
-// SetLoginID sets the "login_id" field.
-func (auo *AccountUpdateOne) SetLoginID(s string) *AccountUpdateOne {
-	auo.mutation.SetLoginID(s)
+// SetEmail sets the "email" field.
+func (auo *AccountUpdateOne) SetEmail(s string) *AccountUpdateOne {
+	auo.mutation.SetEmail(s)
 	return auo
 }
 
@@ -230,12 +221,6 @@ func (auo *AccountUpdateOne) SetHashedPassword(s string) *AccountUpdateOne {
 // SetName sets the "name" field.
 func (auo *AccountUpdateOne) SetName(s string) *AccountUpdateOne {
 	auo.mutation.SetName(s)
-	return auo
-}
-
-// SetEmail sets the "email" field.
-func (auo *AccountUpdateOne) SetEmail(s string) *AccountUpdateOne {
-	auo.mutation.SetEmail(s)
 	return auo
 }
 
@@ -352,17 +337,14 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			}
 		}
 	}
-	if value, ok := auo.mutation.LoginID(); ok {
-		_spec.SetField(account.FieldLoginID, field.TypeString, value)
+	if value, ok := auo.mutation.Email(); ok {
+		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.HashedPassword(); ok {
 		_spec.SetField(account.FieldHashedPassword, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.Name(); ok {
 		_spec.SetField(account.FieldName, field.TypeString, value)
-	}
-	if value, ok := auo.mutation.Email(); ok {
-		_spec.SetField(account.FieldEmail, field.TypeString, value)
 	}
 	if value, ok := auo.mutation.PhoneNumber(); ok {
 		_spec.SetField(account.FieldPhoneNumber, field.TypeString, value)
@@ -378,7 +360,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Columns: []string{account.RoleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -391,7 +373,7 @@ func (auo *AccountUpdateOne) sqlSave(ctx context.Context) (_node *Account, err e
 			Columns: []string{account.RoleColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32),
+				IDSpec: sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

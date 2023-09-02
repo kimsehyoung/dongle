@@ -20,15 +20,9 @@ type RoleCreate struct {
 	hooks    []Hook
 }
 
-// SetMemberType sets the "member_type" field.
-func (rc *RoleCreate) SetMemberType(s string) *RoleCreate {
-	rc.mutation.SetMemberType(s)
-	return rc
-}
-
-// SetID sets the "id" field.
-func (rc *RoleCreate) SetID(i int32) *RoleCreate {
-	rc.mutation.SetID(i)
+// SetType sets the "type" field.
+func (rc *RoleCreate) SetType(s string) *RoleCreate {
+	rc.mutation.SetType(s)
 	return rc
 }
 
@@ -81,8 +75,13 @@ func (rc *RoleCreate) ExecX(ctx context.Context) {
 
 // check runs all checks and user-defined validators on the builder.
 func (rc *RoleCreate) check() error {
-	if _, ok := rc.mutation.MemberType(); !ok {
-		return &ValidationError{Name: "member_type", err: errors.New(`authgen: missing required field "Role.member_type"`)}
+	if _, ok := rc.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`authgen: missing required field "Role.type"`)}
+	}
+	if v, ok := rc.mutation.GetType(); ok {
+		if err := role.TypeValidator(v); err != nil {
+			return &ValidationError{Name: "type", err: fmt.Errorf(`authgen: validator failed for field "Role.type": %w`, err)}
+		}
 	}
 	return nil
 }
@@ -98,10 +97,8 @@ func (rc *RoleCreate) sqlSave(ctx context.Context) (*Role, error) {
 		}
 		return nil, err
 	}
-	if _spec.ID.Value != _node.ID {
-		id := _spec.ID.Value.(int64)
-		_node.ID = int32(id)
-	}
+	id := _spec.ID.Value.(int64)
+	_node.ID = int(id)
 	rc.mutation.id = &_node.ID
 	rc.mutation.done = true
 	return _node, nil
@@ -110,15 +107,11 @@ func (rc *RoleCreate) sqlSave(ctx context.Context) (*Role, error) {
 func (rc *RoleCreate) createSpec() (*Role, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Role{config: rc.config}
-		_spec = sqlgraph.NewCreateSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt32))
+		_spec = sqlgraph.NewCreateSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt))
 	)
-	if id, ok := rc.mutation.ID(); ok {
-		_node.ID = id
-		_spec.ID.Value = id
-	}
-	if value, ok := rc.mutation.MemberType(); ok {
-		_spec.SetField(role.FieldMemberType, field.TypeString, value)
-		_node.MemberType = value
+	if value, ok := rc.mutation.GetType(); ok {
+		_spec.SetField(role.FieldType, field.TypeString, value)
+		_node.Type = value
 	}
 	if nodes := rc.mutation.AccountsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -179,9 +172,9 @@ func (rcb *RoleCreateBulk) Save(ctx context.Context) ([]*Role, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
+				if specs[i].ID.Value != nil {
 					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int32(id)
+					nodes[i].ID = int(id)
 				}
 				mutation.done = true
 				return nodes[i], nil

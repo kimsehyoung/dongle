@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/account"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
 	"github.com/kimsehyoung/dongle/app/auth/ent/schema"
 )
 
@@ -16,7 +17,13 @@ func init() {
 	accountFields := schema.Account{}.Fields()
 	_ = accountFields
 	// accountDescCreatedAt is the schema descriptor for created_at field.
-	accountDescCreatedAt := accountFields[6].Descriptor()
+	accountDescCreatedAt := accountFields[5].Descriptor()
 	// account.DefaultCreatedAt holds the default value on creation for the created_at field.
 	account.DefaultCreatedAt = accountDescCreatedAt.Default.(time.Time)
+	roleFields := schema.Role{}.Fields()
+	_ = roleFields
+	// roleDescType is the schema descriptor for type field.
+	roleDescType := roleFields[0].Descriptor()
+	// role.TypeValidator is a validator for the "type" field. It is called by the builders before save.
+	role.TypeValidator = roleDescType.Validators[0].(func(string) error)
 }

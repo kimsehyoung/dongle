@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"errors"
+
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/schema/edge"
@@ -15,11 +17,19 @@ type Role struct {
 // Fields of the Role.
 func (Role) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int32("id"),
-		field.String("member_type").
+		field.String("type").
 			Unique().
 			SchemaType(map[string]string{
 				dialect.Postgres: "varchar(16)",
+			}).
+			Validate(func(in string) error {
+				roles := []string{"root", "admin", "user"}
+				for _, role := range roles {
+					if role == in {
+						return nil
+					}
+				}
+				return errors.New("Allowed roles: 'root', 'admin', or 'user'")
 			}),
 	}
 }

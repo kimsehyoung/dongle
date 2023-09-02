@@ -16,6 +16,7 @@ func main() {
 		TestServiceAddr:   env.GetEnvString("TEST_SERVICE_ADDR", "test-service:10003"),
 		AuthServiceAddr:   env.GetEnvString("AUTH_SERVICE_ADDR", "auth-service:10004"),
 		SpeechServiceAddr: env.GetEnvString("SPEECH_SERVICE_ADDR", "speech-service:10005"),
+		TokenDbAddr:       env.GetEnvString("TOKEN_DB_ADDR", "token-db:6379"),
 	}
 	server.StartGrpcServer(serviceInfo)
 	server.StartRestServer(serviceInfo)

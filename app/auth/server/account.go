@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
-	"github.com/kimsehyoung/dongle/app/auth/utils/validator"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
+	"github.com/kimsehyoung/dongle/app/auth/server/validator"
 	"github.com/kimsehyoung/logger"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
@@ -13,40 +15,58 @@ import (
 )
 
 func (s *authService) CreateAccount(ctx context.Context, req *authpb.AccountRequest) (*emptypb.Empty, error) {
-	logger.Info(req.Email, req.Name, req.Password, req.PhoneNumber, req.Role)
 
+	// Validate account input values
 	err := validator.IsValidAccount(&validator.Account{
 		Email:       req.Email,
 		Name:        req.Name,
 		Password:    req.Password,
 		PhoneNumber: req.PhoneNumber,
 	})
-
 	if err != nil {
-		logger.Info("Invalid account: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "Failed to validate Account: %v ", err)
 	}
 
-	//  This does not accept passwords longer than 72 bytes.
+	//  Generate hashed password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "Failed to generate hashed password: %v", err)
+		return nil, status.Errorf(codes.Internal, "Failed to generate hashed password: %v", err)
 	}
 
+	// TODO: Creating 'admin' account with secret.
+	if req.Role == "root" || req.Role == "admin" {
+		return nil, status.Error(codes.Unauthenticated, "Creating admin account is not permitted.")
+	}
+
+	// Query role record from request
+	role, err := s.authdbClient.Role.
+		Query().
+		Where(role.Type(req.Role)).
+		Only(ctx)
+	if authgen.IsNotFound(err) {
+		return nil, status.Errorf(codes.InvalidArgument, "Not found role: %v", err)
+	}
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "Failed to create: %v", err)
+	}
+
+	// Create Acccout
 	account, err := s.authdbClient.Account.
 		Create().
+		SetRole(role).
 		SetEmail(req.Email).
-		SetName(req.Name).
 		SetHashedPassword(string(hashedPassword)).
+		SetName(req.Name).
 		SetPhoneNumber(req.PhoneNumber).
-		SetRoleID(int32(req.Role)).
 		Save(ctx)
-	if err != nil {
-		return nil, err
+	if authgen.IsConstraintError(err) {
+		return nil, status.Errorf(codes.AlreadyExists, "%s already exists. errmsg(%s)", account.Email, err.Error())
+	} else if err != nil {
+		return nil, status.Errorf(codes.Internal, "Failed to create: %v", err)
 	}
-	logger.Info("The account %s(%d) has been created.", account.Email, account.RoleID)
 
-	return nil, nil
+	logger.Infof("The account %s has been created", account.Email)
+	return &emptypb.Empty{}, nil
 }
 
 func (s *authService) DeleteAccount(ctx context.Context, _ *emptypb.Empty) (*emptypb.Empty, error) {

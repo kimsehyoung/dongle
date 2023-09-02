@@ -14,7 +14,7 @@ func (s *SpeechService) Recognize(ctx context.Context, req *speechpb.RecognizeRe
 		logger.Errorf("Failed to respond from Speech Service (%v)", err)
 		return nil, err
 	}
-	return &speechpb.RecognizeResponse{Text: resp.Text}, nil
+	return resp, nil
 }
 
 func (s *SpeechService) Synthesize(ctx context.Context, req *speechpb.SynthesizeRequest) (*speechpb.SynthesizeResponse, error) {
@@ -24,5 +24,5 @@ func (s *SpeechService) Synthesize(ctx context.Context, req *speechpb.Synthesize
 		logger.Errorf("Failed to respond from Speech Service (%v)", err)
 		return nil, err
 	}
-	return &speechpb.SynthesizeResponse{Audio: resp.Audio}, nil
+	return resp, nil
 }

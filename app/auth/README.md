@@ -2,12 +2,16 @@
 
 
 **Table of Contents**
+- [Important Notes](#important-notes)
 - [Database PostgreSQL](#database-postgresql)
 - [ORM ent](#orm-ent)
 - [pgx](#pgx)
 - [TODO](#todo)
 ---
 <br><br>
+
+## Important Notes
+데이터베이스 서버를 처음 실행할 때는 `init_db.go`를 실행하여 'Schema 생성', 'role', 'root 계정' 초기화 필요
 
 
 ## Database PostgreSQL
@@ -74,6 +78,7 @@ https://entgo.io/docs/schema-fields
 ## TODO
 
 ### Database
+- Valut에서 DB 정보, Secret key 정보
 - Account 테이블
     - 사용자별 password 'salt' 고려
     - 사용자 삭제 후, 유예 기간으로 'is_deleted' 추가 고려
