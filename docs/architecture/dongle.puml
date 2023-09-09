@@ -11,12 +11,12 @@ System_Boundary(c1, "Dongle") {
         Container(auth, "Auth", "Go, gRPC", "Account, Token-based, Role-based access control")
         Container(speech, "Speech", "Go, gRPC", "TTS, STT")
         Container(chatbot, "Chatbot", "Python, gRPC", "1. rule-based intent\n 2. deeplearning chat-api")
-        Container(video, "Video", "Go, gRPC","management, subtitle")
+        Container(subtitle, "Subtitle", "Go, gRPC", "Store and subtitle Videos")
     }
     ContainerDb(auth_memorydb, "In-memory database", "Redis", "refresh token")
     Boundary(c2_db, "Schema per Service") {
         ContainerDb(auth_rdb, "Relational database", "PostgreSQL", "account, role")
-        ContainerDb(chatbot_rdb, "Relational database", "PostgreSQL", "question history")
+        ContainerDb(subtitle_rdb, "Relational database", "PostgreSQL", "uploaded videos")
     }
 
 }
@@ -37,14 +37,14 @@ Rel(client, api_gateway, "", "REST/gRPC")
 Rel(api_gateway, auth, "", "gRPC")
 Rel(api_gateway, speech, "", "gRPC")
 Rel(api_gateway, chatbot, "", "gRPC")
-Rel(api_gateway, video, "", "gRPC")
+Rel(api_gateway, subtitle, "", "gRPC")
 Rel_R(api_gateway, auth_memorydb, "", "TCP")
 Rel(auth, auth_rdb, "", "TCP")
 Rel(speech, whisper, "", "REST")
 Rel(speech, texttospeech, "", "gRPC")
-Rel(chatbot, chatbot_rdb, "", "TCP")
-Rel(video, minio, "", "HTTP")
-Rel(client, minio, "video", "HTTP")
+Rel(subtitle, subtitle_rdb, "", "TCP")
+Rel(subtitle, minio, "", "HTTP")
+Rel(client, minio, "subtitle", "HTTP")
 
 
 
