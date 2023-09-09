@@ -3,53 +3,60 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
 
 var (
-	// AccountsColumns holds the columns for the "accounts" table.
-	AccountsColumns = []*schema.Column{
+	// AccountColumns holds the columns for the "account" table.
+	AccountColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "email", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(320)"}},
-		{Name: "hashed_password", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(32)"}},
+		{Name: "hashed_password", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(64)"}},
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(32)"}},
 		{Name: "phone_number", Type: field.TypeString, SchemaType: map[string]string{"postgres": "varchar(32)"}},
 		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"postgres": "date"}},
 		{Name: "role_id", Type: field.TypeInt},
 	}
-	// AccountsTable holds the schema information for the "accounts" table.
-	AccountsTable = &schema.Table{
-		Name:       "accounts",
-		Columns:    AccountsColumns,
-		PrimaryKey: []*schema.Column{AccountsColumns[0]},
+	// AccountTable holds the schema information for the "account" table.
+	AccountTable = &schema.Table{
+		Name:       "account",
+		Columns:    AccountColumns,
+		PrimaryKey: []*schema.Column{AccountColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "accounts_roles_accounts",
-				Columns:    []*schema.Column{AccountsColumns[6]},
-				RefColumns: []*schema.Column{RolesColumns[0]},
+				Symbol:     "account_role_accounts",
+				Columns:    []*schema.Column{AccountColumns[6]},
+				RefColumns: []*schema.Column{RoleColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 		},
 	}
-	// RolesColumns holds the columns for the "roles" table.
-	RolesColumns = []*schema.Column{
+	// RoleColumns holds the columns for the "role" table.
+	RoleColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "type", Type: field.TypeString, Unique: true, SchemaType: map[string]string{"postgres": "varchar(16)"}},
 	}
-	// RolesTable holds the schema information for the "roles" table.
-	RolesTable = &schema.Table{
-		Name:       "roles",
-		Columns:    RolesColumns,
-		PrimaryKey: []*schema.Column{RolesColumns[0]},
+	// RoleTable holds the schema information for the "role" table.
+	RoleTable = &schema.Table{
+		Name:       "role",
+		Columns:    RoleColumns,
+		PrimaryKey: []*schema.Column{RoleColumns[0]},
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		AccountsTable,
-		RolesTable,
+		AccountTable,
+		RoleTable,
 	}
 )
 
 func init() {
-	AccountsTable.ForeignKeys[0].RefTable = RolesTable
+	AccountTable.ForeignKeys[0].RefTable = RoleTable
+	AccountTable.Annotation = &entsql.Annotation{
+		Table: "account",
+	}
+	RoleTable.Annotation = &entsql.Annotation{
+		Table: "role",
+	}
 }

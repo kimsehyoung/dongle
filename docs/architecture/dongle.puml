@@ -6,7 +6,7 @@ Person(client, "Client" , "Users")
 
 
 System_Boundary(c1, "Dongle") {
-    Boundary(c2, "API Gateway pattern") {
+    Boundary(c2, "API Gateway") {
         Container(api_gateway, "API Gateway", "Go, gRPC-Gateway","Single API endpoint, Interceptor")
         Container(auth, "Auth", "Go, gRPC", "Account, Token-based, Role-based access control")
         Container(speech, "Speech", "Go, gRPC", "TTS, STT")
@@ -14,7 +14,7 @@ System_Boundary(c1, "Dongle") {
         Container(video, "Video", "Go, gRPC","management, subtitle")
     }
     ContainerDb(auth_memorydb, "In-memory database", "Redis", "refresh token")
-    Boundary(c2_db, "Database per Service pattern") {
+    Boundary(c2_db, "Schema per Service") {
         ContainerDb(auth_rdb, "Relational database", "PostgreSQL", "account, role")
         ContainerDb(chatbot_rdb, "Relational database", "PostgreSQL", "question history")
     }

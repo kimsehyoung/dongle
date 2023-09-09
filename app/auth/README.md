@@ -16,9 +16,16 @@
 
 ## Database PostgreSQL
 
-### Schema
+### Naming
+https://launchbylunch.com/posts/2014/Feb/16/sql-naming-conventions/
 
-### Role
+### Schema per Service
+
+https://entgo.io/docs/feature-flags/#schema-config
+
+### Tables
+
+#### Role
 - 추가, 변경 가능성이 있기에, enum type이 아닌 테이블 사용<br>
 
 
@@ -51,7 +58,7 @@ Apache-2.0 license
 ```bash
 go install entgo.io/ent/cmd/ent@v0.12
 
-ent new <Schema>
+ent new <Schema> Account Role
 # Afet writing Schema
 go generate ./ent
 
@@ -72,6 +79,16 @@ https://entgo.io/docs/schema-fields
 
 ## pgx
 
+### lib/pq
+This package is currently in maintenance mode, which means:
+- It generally does not accept new features.
+- It does accept bug fixes and version compatability changes provided by the community.
+- Maintainers usually do not resolve reported issues.
+- Community members are encouraged to help each other with reported issues.
+- For users that require new features or reliable resolution of reported bugs,
+    we recommend using pgx which is under active development.
+
+### pgx
 - https://entgo.io/docs/sql-integration/#use-pgx-with-postgresql
 - https://github.com/jackc/pgx/wiki/Getting-started-with-pgx#using-a-connection-pool
 

@@ -5,6 +5,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
@@ -12,6 +14,12 @@ import (
 // Account holds the schema definition for the Account entity.
 type Account struct {
 	ent.Schema
+}
+
+func (Account) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entsql.Annotation{Table: "account"},
+	}
 }
 
 // Fields of the Account.
@@ -25,7 +33,7 @@ func (Account) Fields() []ent.Field {
 			}),
 		field.String("hashed_password").
 			SchemaType(map[string]string{
-				dialect.Postgres: "varchar(32)",
+				dialect.Postgres: "varchar(64)",
 			}),
 		field.String("name").
 			SchemaType(map[string]string{

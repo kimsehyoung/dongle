@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/account"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/internal"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/predicate"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
 )
@@ -76,6 +77,9 @@ func (rq *RoleQuery) QueryAccounts() *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, role.AccountsTable, role.AccountsColumn),
 		)
+		schemaConfig := rq.schemaConfig
+		step.To.Schema = schemaConfig.Account
+		step.Edge.Schema = schemaConfig.Account
 		fromU = sqlgraph.SetNeighbors(rq.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -383,6 +387,8 @@ func (rq *RoleQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Role, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
+	_spec.Node.Schema = rq.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
 	for i := range hooks {
 		hooks[i](ctx, _spec)
 	}
@@ -435,6 +441,8 @@ func (rq *RoleQuery) loadAccounts(ctx context.Context, query *AccountQuery, node
 
 func (rq *RoleQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := rq.querySpec()
+	_spec.Node.Schema = rq.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
 	_spec.Node.Columns = rq.ctx.Fields
 	if len(rq.ctx.Fields) > 0 {
 		_spec.Unique = rq.ctx.Unique != nil && *rq.ctx.Unique
@@ -497,6 +505,9 @@ func (rq *RoleQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if rq.ctx.Unique != nil && *rq.ctx.Unique {
 		selector.Distinct()
 	}
+	t1.Schema(rq.schemaConfig.Role)
+	ctx = internal.NewSchemaConfigContext(ctx, rq.schemaConfig)
+	selector.WithContext(ctx)
 	for _, p := range rq.predicates {
 		p(selector)
 	}

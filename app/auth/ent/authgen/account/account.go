@@ -29,12 +29,12 @@ const (
 	// EdgeRole holds the string denoting the role edge name in mutations.
 	EdgeRole = "role"
 	// Table holds the table name of the account in the database.
-	Table = "accounts"
+	Table = "account"
 	// RoleTable is the table that holds the role relation/edge.
-	RoleTable = "accounts"
+	RoleTable = "account"
 	// RoleInverseTable is the table name for the Role entity.
 	// It exists in this package in order to avoid circular dependency with the "role" package.
-	RoleInverseTable = "roles"
+	RoleInverseTable = "role"
 	// RoleColumn is the table column denoting the role relation/edge.
 	RoleColumn = "role_id"
 )

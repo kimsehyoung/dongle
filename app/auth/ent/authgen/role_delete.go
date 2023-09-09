@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/internal"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/predicate"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
 )
@@ -41,6 +42,8 @@ func (rd *RoleDelete) ExecX(ctx context.Context) int {
 
 func (rd *RoleDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(role.Table, sqlgraph.NewFieldSpec(role.FieldID, field.TypeInt))
+	_spec.Node.Schema = rd.schemaConfig.Role
+	ctx = internal.NewSchemaConfigContext(ctx, rd.schemaConfig)
 	if ps := rd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

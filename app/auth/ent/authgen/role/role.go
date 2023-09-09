@@ -17,12 +17,12 @@ const (
 	// EdgeAccounts holds the string denoting the accounts edge name in mutations.
 	EdgeAccounts = "accounts"
 	// Table holds the table name of the role in the database.
-	Table = "roles"
+	Table = "role"
 	// AccountsTable is the table that holds the accounts relation/edge.
-	AccountsTable = "accounts"
+	AccountsTable = "account"
 	// AccountsInverseTable is the table name for the Account entity.
 	// It exists in this package in order to avoid circular dependency with the "account" package.
-	AccountsInverseTable = "accounts"
+	AccountsInverseTable = "account"
 	// AccountsColumn is the table column denoting the accounts relation/edge.
 	AccountsColumn = "role_id"
 )

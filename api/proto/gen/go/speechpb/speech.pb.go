@@ -27,10 +27,8 @@ type RecognizeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ko, en, ja, zh
-	Language string `protobuf:"bytes,1,opt,name=language,proto3" json:"language,omitempty"`
-	// A base64-encoded string.
-	Audio []byte `protobuf:"bytes,2,opt,name=audio,proto3" json:"audio,omitempty"`
+	Language string `protobuf:"bytes,1,opt,name=language,proto3" json:"language,omitempty"` // ko, en, ja, zh
+	Audio    []byte `protobuf:"bytes,2,opt,name=audio,proto3" json:"audio,omitempty"`       // A base64-encoded string.
 }
 
 func (x *RecognizeRequest) Reset() {
@@ -132,8 +130,7 @@ type SynthesizeRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// ko, en, ja, zh
-	Language string `protobuf:"bytes,1,opt,name=language,proto3" json:"language,omitempty"`
+	Language string `protobuf:"bytes,1,opt,name=language,proto3" json:"language,omitempty"` // ko, en, ja, zh
 	Text     string `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
 }
 
@@ -188,8 +185,7 @@ type SynthesizeResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// A base64-encoded string.
-	Audio []byte `protobuf:"bytes,1,opt,name=audio,proto3" json:"audio,omitempty"`
+	Audio []byte `protobuf:"bytes,1,opt,name=audio,proto3" json:"audio,omitempty"` // A base64-encoded string.
 }
 
 func (x *SynthesizeResponse) Reset() {

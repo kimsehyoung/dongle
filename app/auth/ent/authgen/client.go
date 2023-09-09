@@ -16,6 +16,8 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/account"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
+
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/internal"
 )
 
 // Client is the client that holds all ent builders.
@@ -57,6 +59,8 @@ type (
 		hooks *hooks
 		// interceptors to execute on queries.
 		inters *inters
+		// schemaConfig contains alternative names for all tables.
+		schemaConfig SchemaConfig
 	}
 	// Option function to configure the client.
 	Option func(*config)
@@ -301,6 +305,9 @@ func (c *AccountClient) QueryRole(a *Account) *RoleQuery {
 			sqlgraph.To(role.Table, role.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, account.RoleTable, account.RoleColumn),
 		)
+		schemaConfig := a.schemaConfig
+		step.To.Schema = schemaConfig.Role
+		step.Edge.Schema = schemaConfig.Account
 		fromV = sqlgraph.Neighbors(a.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -435,6 +442,9 @@ func (c *RoleClient) QueryAccounts(r *Role) *AccountQuery {
 			sqlgraph.To(account.Table, account.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, role.AccountsTable, role.AccountsColumn),
 		)
+		schemaConfig := r.schemaConfig
+		step.To.Schema = schemaConfig.Account
+		step.Edge.Schema = schemaConfig.Account
 		fromV = sqlgraph.Neighbors(r.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -475,3 +485,15 @@ type (
 		Account, Role []ent.Interceptor
 	}
 )
+
+// SchemaConfig represents alternative schema names for all tables
+// that can be passed at runtime.
+type SchemaConfig = internal.SchemaConfig
+
+// AlternateSchemas allows alternate schema names to be
+// passed into ent operations.
+func AlternateSchema(schemaConfig SchemaConfig) Option {
+	return func(c *config) {
+		c.schemaConfig = schemaConfig
+	}
+}

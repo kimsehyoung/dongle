@@ -7,23 +7,19 @@ import "google/api/annotations.proto";
 
 // ### STT ###
 message RecognizeRequest {
-    // ko, en, ja, zh
-    string language = 1;
-    // A base64-encoded string.
-    bytes audio = 2;
+    string language = 1; // ko, en, ja, zh
+    bytes audio = 2; // A base64-encoded string.
 }
 message RecognizeResponse {
     string text = 1;
 }
 // ### TTS ###
 message SynthesizeRequest {
-    // ko, en, ja, zh
-    string language = 1;
+    string language = 1; // ko, en, ja, zh
     string text = 2;
 }
 message SynthesizeResponse {
-     // A base64-encoded string.
-    bytes audio = 1;
+    bytes audio = 1; // A base64-encoded string.
 }
 
 

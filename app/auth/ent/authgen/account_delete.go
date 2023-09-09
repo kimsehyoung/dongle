@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/account"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/internal"
 	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/predicate"
 )
 
@@ -41,6 +42,8 @@ func (ad *AccountDelete) ExecX(ctx context.Context) int {
 
 func (ad *AccountDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(account.Table, sqlgraph.NewFieldSpec(account.FieldID, field.TypeInt))
+	_spec.Node.Schema = ad.schemaConfig.Account
+	ctx = internal.NewSchemaConfigContext(ctx, ad.schemaConfig)
 	if ps := ad.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
