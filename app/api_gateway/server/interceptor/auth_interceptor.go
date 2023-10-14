@@ -24,10 +24,13 @@ func authFunc(ctx context.Context) (context.Context, error) {
 	if err != nil {
 		return nil, err
 	}
-	_, err = jwt.VerifyJwt(token)
+	claim, err := jwt.VerifyJwt(token)
 	if err != nil {
 		return nil, err
 	}
+
+	ctx = context.WithValue(ctx, "login_id", claim.Subject)
+
 	return ctx, nil
 }
 

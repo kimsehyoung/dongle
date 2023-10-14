@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen/role"
 	"github.com/kimsehyoung/dongle/app/auth/server/validator"
 	"github.com/kimsehyoung/logger"
 	"golang.org/x/crypto/bcrypt"
@@ -43,7 +43,7 @@ func (s *authService) CreateAccount(ctx context.Context, req *authpb.AccountRequ
 		Query().
 		Where(role.Type(req.Role)).
 		Only(ctx)
-	if authgen.IsNotFound(err) {
+	if authdbgen.IsNotFound(err) {
 		return nil, status.Errorf(codes.InvalidArgument, "Not found role: %v", err)
 	}
 	if err != nil {
@@ -59,7 +59,7 @@ func (s *authService) CreateAccount(ctx context.Context, req *authpb.AccountRequ
 		SetName(req.Name).
 		SetPhoneNumber(req.PhoneNumber).
 		Save(ctx)
-	if authgen.IsConstraintError(err) {
+	if authdbgen.IsConstraintError(err) {
 		return nil, status.Errorf(codes.AlreadyExists, "%s already exists. errmsg(%s)", account.Email, err.Error())
 	} else if err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to create: %v", err)

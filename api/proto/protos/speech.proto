@@ -3,6 +3,32 @@ package dongle.speech;
 option go_package = "github.com/kimsehyoung/dongle/api/proto/gen/go/speechpb";
 
 import "google/api/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+    host: "__API_BASE_URL__";
+    info: {
+        title: "Dongle speech service";
+        version: "0.0";
+        description: "desc";
+    }
+    security_definitions: {
+        security: {
+            key: "bearer"
+            value: {
+                type: TYPE_API_KEY
+                in: IN_HEADER
+                name: "Authorization"
+                description: "Authentication token, prefixed by Bearer: Bearer <token>"
+            }
+        }
+    }
+    security: {
+        security_requirement: {
+            key: "bearer"
+        }
+    }
+};
 
 
 // ### STT ###

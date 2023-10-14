@@ -1,0 +1,229 @@
+swagger: "2.0"
+info:
+  title: Dongle auth service
+  description: desc
+  version: "0.0"
+tags:
+  - name: Auth
+host: __API_BASE_URL__
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /accounts:
+    delete:
+      operationId: Auth_DeleteAccount
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      tags:
+        - Auth
+    post:
+      summary: '#######    Account    #######'
+      operationId: Auth_CreateAccount
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/authAccountRequest'
+      tags:
+        - Auth
+      security: []
+  /accounts/password:
+    put:
+      operationId: Auth_ChangePassword
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/authPasswordRequest'
+      tags:
+        - Auth
+  /confirmations/password:
+    post:
+      operationId: Auth_ConfirmPassword
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: password
+          in: body
+          required: true
+          schema:
+            type: string
+        - name: newPassword
+          in: query
+          required: false
+          type: string
+      tags:
+        - Auth
+  /login/token:
+    post:
+      summary: '#######    Login    #######'
+      operationId: Auth_CreateToken
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/authTokenResposne'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/authCreateTokenRequest'
+      tags:
+        - Auth
+      security: []
+  /login/token/refresh:
+    post:
+      operationId: Auth_RefreshToken
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/authTokenResposne'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/authTokenRequest'
+      tags:
+        - Auth
+      security: []
+  /login/token/revoke:
+    post:
+      operationId: Auth_RevokeToken
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            type: object
+            properties: {}
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/authTokenRequest'
+      tags:
+        - Auth
+definitions:
+  authAccountRequest:
+    type: object
+    properties:
+      role:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      name:
+        type: string
+      phoneNumber:
+        type: string
+    title: '#######    Account    #######'
+  authCreateTokenRequest:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    title: '#######    Login    #######'
+  authPasswordRequest:
+    type: object
+    properties:
+      password:
+        type: string
+      newPassword:
+        type: string
+  authTokenRequest:
+    type: object
+    properties:
+      refreshToken:
+        type: string
+  authTokenResposne:
+    type: object
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+securityDefinitions:
+  bearer:
+    type: apiKey
+    description: 'Authentication token, prefixed by Bearer: Bearer <token>'
+    name: Authorization
+    in: header
+security:
+  - bearer: []

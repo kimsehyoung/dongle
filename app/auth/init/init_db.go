@@ -11,8 +11,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 
 	"entgo.io/ent/dialect"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/role"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen/role"
 	"github.com/kimsehyoung/dongle/app/auth/server/validator"
 	"github.com/kimsehyoung/dongle/internal/utils/env"
 	"github.com/kimsehyoung/logger"
@@ -27,7 +27,7 @@ type Account struct {
 
 var rootAccount *Account
 
-func rollback(tx *authgen.Tx, err error) error {
+func rollback(tx *authdbgen.Tx, err error) error {
 	if rerr := tx.Rollback(); rerr != nil {
 		err = fmt.Errorf("%w: %v", err, rerr)
 	}
@@ -65,14 +65,14 @@ func parse() error {
 }
 
 // Connect to db with auth schema
-func open() (*authgen.Client, error) {
+func open() (*authdbgen.Client, error) {
 	// Create DB client
 	db, err := sql.Open("pgx", fmt.Sprintf("%s://%s:%s@%s:%s/%s?search_path=%s",
 		dialect.Postgres,
 		env.GetEnvString("DONGLE_DB_USER", "postgres"),
 		env.GetEnvString("DONGLE_DB_PASSWORD", "1234"),
 		env.GetEnvString("DONGLE_DB_HOST", "dongle-postgres"),
-		env.GetEnvString("DONGLE_DB_PORT", "10002"),
+		env.GetEnvString("DONGLE_DB_PORT", "5432"),
 		env.GetEnvString("DONGLE_DB_NAME", "dongle"),
 		env.GetEnvString("DONGLE_DB_SCHEMA", "auth"),
 	))
@@ -86,12 +86,12 @@ func open() (*authgen.Client, error) {
 	}
 
 	drv := entsql.OpenDB(dialect.Postgres, db)
-	client := authgen.NewClient(authgen.Driver(drv))
+	client := authdbgen.NewClient(authdbgen.Driver(drv))
 	return client, nil
 }
 
 // Create 'root', 'admin', 'user' roles
-func createRoles(ctx context.Context, tx *authgen.Tx) error {
+func createRoles(ctx context.Context, tx *authdbgen.Tx) error {
 	_, err := tx.Role.Create().SetType("root").Save(ctx)
 	if err != nil {
 		return fmt.Errorf("Create role %v", err)
@@ -110,7 +110,7 @@ func createRoles(ctx context.Context, tx *authgen.Tx) error {
 }
 
 // Create 'root' account
-func createRoot(ctx context.Context, tx *authgen.Tx) error {
+func createRoot(ctx context.Context, tx *authdbgen.Tx) error {
 	role, err := tx.Role.
 		Query().
 		Where(role.Type("root")).
@@ -136,13 +136,13 @@ func createRoot(ctx context.Context, tx *authgen.Tx) error {
 func main() {
 	// Parse root account Info
 	if err := parse(); err != nil {
-		logger.Fatalf("Failed to parse: %v", err)
+		logger.Fatalf("[parse fail] %v", err)
 	}
 
 	// Connect to db with auth schema
 	client, err := open()
 	if err != nil {
-		logger.Fatalf("Failed to open: %v", err)
+		logger.Fatalf("[open fail] %v", err)
 	}
 	defer client.Close()
 

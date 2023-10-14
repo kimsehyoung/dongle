@@ -1,9 +1,11 @@
 package jwt
 
 import (
+	"encoding/hex"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/kimsehyoung/dongle/internal/utils/encrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -27,16 +29,21 @@ type MyCustomClaims struct {
 	RoleId int `json:"roleId"`
 }
 
-func CreateJwt(roleId int, loginId string, tokenType TokenType) (string, error) {
+func CreateJwt(roleId int, accountId string, tokenType TokenType) (string, error) {
 	duration := accessTokenDuration
 	if tokenType == REFRESH_TOKEN {
 		duration = RefreshTokenDuration
 	}
 
+	encryptedAccountId, err := encrypt.Encrypt([]byte(accountId))
+	if err != nil {
+		return "", err
+	}
+
 	claims := &MyCustomClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "sehyoung",
-			Subject:   loginId,
+			Subject:   hex.EncodeToString(encryptedAccountId),
 			Audience:  []string{"dognle"},
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(duration)),
 			// NotBefore:

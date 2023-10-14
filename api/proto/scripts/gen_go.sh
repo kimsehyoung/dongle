@@ -3,6 +3,7 @@
 GIT_ROOT_PATH=$(git rev-parse --show-toplevel)
 GEN_PATH="${GIT_ROOT_PATH}/api/proto/gen/go"
 PROTO_PATH="${GIT_ROOT_PATH}/api/proto/protos"
+OPENAPI_GEN_PATH="${GIT_ROOT_PATH}/api/proto/gen/openapi"
 
 for PROTO_FILE in $(find $PROTO_PATH -maxdepth 1 -name "*.proto")
 do
@@ -15,6 +16,9 @@ do
             --grpc-gateway_out "${GEN_PATH}/${SERVICE_NAME}" \
             --grpc-gateway_opt logtostderr=true \
             --grpc-gateway_opt paths=source_relative \
+            --openapiv2_out "${OPENAPI_GEN_PATH}" \
+            --openapiv2_opt logtostderr=true \
+            --openapiv2_opt=output_format=yaml \
             ${PROTO_FILE}
 done
 

@@ -1,0 +1,115 @@
+swagger: "2.0"
+info:
+  title: Dongle speech service
+  description: desc
+  version: "0.0"
+tags:
+  - name: Speech
+host: __API_BASE_URL__
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /speech/recognize:
+    post:
+      summary: '### STT ###'
+      operationId: Speech_Recognize
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/speechRecognizeResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/speechRecognizeRequest'
+      tags:
+        - Speech
+  /text/synthesize:
+    post:
+      summary: '### TTS ###'
+      operationId: Speech_Synthesize
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/speechSynthesizeResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/speechSynthesizeRequest'
+      tags:
+        - Speech
+definitions:
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+  speechRecognizeRequest:
+    type: object
+    properties:
+      language:
+        type: string
+        title: ko, en, ja, zh
+      audio:
+        type: string
+        format: byte
+        description: A base64-encoded string.
+    title: '### STT ###'
+  speechRecognizeResponse:
+    type: object
+    properties:
+      text:
+        type: string
+  speechSynthesizeRequest:
+    type: object
+    properties:
+      language:
+        type: string
+        title: ko, en, ja, zh
+      text:
+        type: string
+    title: '### TTS ###'
+  speechSynthesizeResponse:
+    type: object
+    properties:
+      audio:
+        type: string
+        format: byte
+        description: A base64-encoded string.
+securityDefinitions:
+  bearer:
+    type: apiKey
+    description: 'Authentication token, prefixed by Bearer: Bearer <token>'
+    name: Authorization
+    in: header
+security:
+  - bearer: []

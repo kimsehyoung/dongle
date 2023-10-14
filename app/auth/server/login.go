@@ -2,11 +2,14 @@ package server
 
 import (
 	"context"
+	"encoding/hex"
+	"strconv"
 
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen/account"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen/account"
 	"github.com/kimsehyoung/dongle/app/auth/server/jwt"
+	"github.com/kimsehyoung/dongle/internal/utils/encrypt"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -19,7 +22,7 @@ func (s *authService) CreateToken(ctx context.Context, req *authpb.CreateTokenRe
 		Query().
 		Where(account.Email(req.Email)).
 		Only(ctx)
-	if authgen.IsNotFound(err) {
+	if authdbgen.IsNotFound(err) {
 		return nil, status.Errorf(codes.InvalidArgument, "Incorrect ID or Password: %v", err)
 	}
 	if err != nil {
@@ -36,11 +39,11 @@ func (s *authService) CreateToken(ctx context.Context, req *authpb.CreateTokenRe
 	}
 
 	// Create jwt
-	accessToken, err := jwt.CreateJwt(account.RoleID, account.Email, jwt.ACCESS_TOKEN)
+	accessToken, err := jwt.CreateJwt(account.RoleID, strconv.Itoa(account.ID), jwt.ACCESS_TOKEN)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to create access token (%v)", err)
 	}
-	refreshToken, err := jwt.CreateJwt(account.RoleID, account.Email, jwt.REFRESH_TOKEN)
+	refreshToken, err := jwt.CreateJwt(account.RoleID, strconv.Itoa(account.ID), jwt.REFRESH_TOKEN)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to create refresh token (%v)", err)
 	}
@@ -56,12 +59,17 @@ func (s *authService) RefreshToken(ctx context.Context, req *authpb.TokenRequest
 		return nil, err
 	}
 
+	plainSubject, err := encrypt.Decrypt([]byte(claims.Subject))
+	if err != nil {
+		return nil, err
+	}
+
 	// Create jwt
-	accessToken, err := jwt.CreateJwt(claims.RoleId, claims.Subject, jwt.ACCESS_TOKEN)
+	accessToken, err := jwt.CreateJwt(claims.RoleId, hex.EncodeToString(plainSubject), jwt.ACCESS_TOKEN)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to create access token (%v)", err)
 	}
-	refreshToken, err := jwt.CreateJwt(claims.RoleId, claims.Subject, jwt.REFRESH_TOKEN)
+	refreshToken, err := jwt.CreateJwt(claims.RoleId, hex.EncodeToString(plainSubject), jwt.REFRESH_TOKEN)
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "Failed to create refresh token (%v)", err)
 	}

@@ -99,3 +99,9 @@ This package is currently in maintenance mode, which means:
 - Account 테이블
     - 사용자별 password 'salt' 고려
     - 사용자 삭제 후, 유예 기간으로 'is_deleted' 추가 고려
+
+
+### Security
+- uuid
+    - https://tomharrisonjr.com/uuid-or-guid-as-primary-keys-be-careful-7b2aa3dcb439
+    - https://www.percona.com/blog/store-uuid-optimized-way/?source=post_page-----43568d94878a--------------------------------

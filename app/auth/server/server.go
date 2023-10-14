@@ -4,7 +4,7 @@ import (
 	"net"
 
 	"github.com/kimsehyoung/dongle/api/proto/gen/go/authpb"
-	"github.com/kimsehyoung/dongle/app/auth/ent/authgen"
+	"github.com/kimsehyoung/dongle/app/auth/ent/authdbgen"
 	"github.com/kimsehyoung/dongle/app/auth/server/authdb"
 	"github.com/kimsehyoung/logger"
 	"google.golang.org/grpc"
@@ -17,7 +17,7 @@ type ServiceInfo struct {
 
 type authService struct {
 	authpb.AuthServer
-	authdbClient *authgen.Client
+	authdbClient *authdbgen.Client
 }
 
 func StartGrpcServer(serviceInfo ServiceInfo) {
