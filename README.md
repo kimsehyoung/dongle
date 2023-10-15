@@ -156,7 +156,7 @@ style chatbot_service fill:#83502E
     - 2: deeplearning chat-api
 #### `Video` (Go)
 - Managing Unstructed data
-    - object storage: minio -> S3
+    - object storage: S3
 
 #### `Speech` (Go)
 - TTS/STT

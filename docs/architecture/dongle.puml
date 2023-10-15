@@ -16,18 +16,21 @@ System_Boundary(c1, "Dongle") {
     ContainerDb(auth_memorydb, "In-memory database", "Redis", "refresh token")
     Boundary(c2_db, "Schema per Service") {
         ContainerDb(auth_rdb, "Relational database", "PostgreSQL", "account, role")
-        ContainerDb(chatbot_rdb, "Relational database", "PostgreSQL", "question history")
+        ContainerDb(video_rdb, "Relational database", "PostgreSQL", "video files")
     }
 
 }
 
 
-System_Boundary(c1_gcp, "Goodle Cloud") {
+System_Boundary(c1_gcp, "GCP") {
     System_Ext(texttospeech, "Text-to-Speech API")
 }
 
+System_Boundary(c1_aws, "AWS") {
+    System_Ext(s3, "S3", "Object Storage")
+}
+
 System_Boundary(c1_onpremise, "Self-hosted") {
-    System_Ext(minio, "Minio", "Object Storage")
     System_Ext(Vault, "Vault", "Secret Manager")
     System_Ext(whisper, "Whisper", "Speech-to-Text API")
 }
@@ -42,9 +45,9 @@ Rel_R(api_gateway, auth_memorydb, "", "TCP")
 Rel(auth, auth_rdb, "", "TCP")
 Rel(speech, whisper, "", "REST")
 Rel(speech, texttospeech, "", "gRPC")
-Rel(chatbot, chatbot_rdb, "", "TCP")
-Rel(video, minio, "", "HTTP")
-Rel(client, minio, "video", "HTTP")
+Rel(video, video_rdb, "", "TCP")
+Rel(video, s3, "", "HTTP")
+Rel(client, s3, "video", "HTTP")
 
 
 
